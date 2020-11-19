@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Projects\MusicLab\Core\Build\CMakeFiles\9a848d69f64c3c080ec1b549408d8428\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{96C051C4-31FC-3200-BEC7-D7D74233FC9F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
