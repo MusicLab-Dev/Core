@@ -13,8 +13,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       
-    - name: Install dependencies
-      run: sudo apt-get install -y ninja-build lcov libgtest libgtest-dev
+    - name: Install ninja toolchain
+      run: sudo apt-get install -y ninja-build
+
+    - name: Install lcov
+      run: sudo apt-get install -y lcov
+
+    - name: Install google test
+      run: sudo apt-get install -y libgtest-dev && cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && sudo cp *.a /usr/lib && sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a && sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
 
     - name: Build & test
       working-directory: ${{github.workspace}}
