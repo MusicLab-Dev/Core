@@ -172,7 +172,7 @@ TEST(Vector, Erase) \
  \
     constexpr auto Get = [](const std::size_t count) { \
         Vector<int> vector(count); \
-        for (auto i = 0; i < count; ++i) \
+        for (auto i = 0u; i < count; ++i) \
             vector[i] = i; \
         return vector; \
     }; \
@@ -186,7 +186,7 @@ TEST(Vector, Erase) \
         auto vector = Get(count); \
         vector.erase(vector.end() - count / 2, vector.end()); \
         ASSERT_EQ(vector.size(), count / 2); \
-        auto i = 0; \
+        auto i = 0u; \
         for (auto elem : vector) { \
             ASSERT_EQ(elem, i++); \
         } \
