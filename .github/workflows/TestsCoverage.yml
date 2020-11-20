@@ -27,6 +27,9 @@ jobs:
     - name: Build & test
       working-directory: ${{github.workspace}}
       shell: bash
+      env:
+       CC:   gcc-10
+       CXX:  g++-10
       run: make run_coverage
 
     - name: Upload coverage
