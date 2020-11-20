@@ -3,7 +3,7 @@ name: CMake
 on: [push]
 
 jobs:
-  upload_coverage:
+  CodeCoverageReport:
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
@@ -12,6 +12,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      
+    - name: Install dependencies
+      run: sudo apt-get install -y ninja-build lcov
 
     - name: Build & test
       working-directory: ${{github.workspace}}
