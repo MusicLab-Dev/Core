@@ -1,0 +1,3 @@
+[submodule "CompileOptions"]
+	path = CompileOptions
+	url = git@github.com:MusicLab-Dev/CompileOptions.git

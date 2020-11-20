@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project(Core)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED 17)
-
 get_filename_component(CoreDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
 set(CoreSources
@@ -21,5 +18,6 @@ set(CoreSources
 
 add_library(${CMAKE_PROJECT_NAME} ${CoreSources})
 
-message("CorePath: " ${CoreDir}/..)
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC "D:\\Projects\\MusicLab\\Core")
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CoreDir}/..)
+
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC coverage_config)
