@@ -8,9 +8,9 @@ set(CoreBenchmarksSources
     ${CoreBenchmarksDir}/Main.cpp
 )
 
-add_executable(${CMAKE_PROJECT_NAME} ${CoreBenchmarksSources})
+add_executable(${PROJECT_NAME} ${CoreBenchmarksSources})
 
-target_link_libraries(${CMAKE_PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Core
     benchmark::benchmark

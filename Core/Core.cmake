@@ -16,10 +16,10 @@ set(CoreSources
     ${CoreDir}/Core.cpp
 )
 
-add_library(${CMAKE_PROJECT_NAME} ${CoreSources})
+add_library(${PROJECT_NAME} ${CoreSources})
 
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CoreDir}/..)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CoreDir}/..)
 
 if(CODE_COVERAGE)
-    target_compile_options(${CMAKE_PROJECT_NAME} PUBLIC --coverage)
+    target_compile_options(${PROJECT_NAME} PUBLIC --coverage)
 endif()
