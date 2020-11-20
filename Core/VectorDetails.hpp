@@ -8,6 +8,7 @@
 #include <initializer_list>
 #include <memory>
 
+#include "Assert.hpp"
 #include "Utils.hpp"
 
 namespace Core::Internal
@@ -61,7 +62,7 @@ public:
 
     /** @brief Resize with default constructor */
     VectorDetails(const std::size_t count)
-        noexcept(nothrow_constructible(Type) && nothrow_destructible(Type))
+        noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type))
         { resize(count); }
 
     /** @brief Resize with copy constructor */

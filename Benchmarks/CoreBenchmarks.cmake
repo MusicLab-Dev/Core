@@ -6,8 +6,6 @@ get_filename_component(CoreBenchmarksDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
 set(CoreBenchmarksSources
     ${CoreBenchmarksDir}/Main.cpp
-    ${CoreBenchmarksDir}/bench_MPMCQueue.cpp
-    ${CoreBenchmarksDir}/bench_SPSCQueue.cpp
 )
 
 add_executable(${CMAKE_PROJECT_NAME} ${CoreBenchmarksSources})

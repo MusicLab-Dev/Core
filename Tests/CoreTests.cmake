@@ -6,7 +6,6 @@ get_filename_component(CoreTestsDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
 set(CoreTestsSources
     ${CoreTestsDir}/tests_Vector.cpp
-    ${CoreTestsDir}/tests_FlatVector.cpp
     ${CoreTestsDir}/tests_FlatString.cpp
     ${CoreTestsDir}/tests_UniqueAlloc.cpp
 )

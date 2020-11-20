@@ -1,2 +1,0 @@
-D:\Projects\MusicLab\Core\Build\Debug\Core.pdb
-D:\Projects\MusicLab\Core\Build\Core.dir\Debug\Core.pdb
