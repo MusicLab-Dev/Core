@@ -20,4 +20,6 @@ add_library(${CMAKE_PROJECT_NAME} ${CoreSources})
 
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CoreDir}/..)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC coverage_config)
+if(CODE_COVERAGE)
+    target_compile_options(${CMAKE_PROJECT_NAME} PUBLIC --coverage)
+endif()
