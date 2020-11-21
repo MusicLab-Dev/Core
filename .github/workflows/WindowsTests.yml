@@ -2,9 +2,6 @@ name: Windows Tests
 
 on: [push]
 
-env:
-  BUILD_TYPE: Release
-
 jobs:
   Build:
     runs-on: windows-2019
@@ -34,12 +31,12 @@ jobs:
 
     - name: Run toolchain
       working-directory: ${{github.workspace}}/Build
-      run: cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DTESTS=ON -DCMAKE_TOOLCHAIN_FILE=${{runner.workspace}}/Cache/vcpkg/scripts/buildsystems/vcpkg.cmake
+      run: cmake .. -DCMAKE_BUILD_TYPE=Release -DTESTS=ON -DCMAKE_TOOLCHAIN_FILE=${{runner.workspace}}/Cache/vcpkg/scripts/buildsystems/vcpkg.cmake
 
     - name: Build
       working-directory: ${{github.workspace}}/Build
-      run: cmake --build . --config $BUILD_TYPE
+      run: cmake --build . --config Release
 
     - name: Run tests
       working-directory: ${{github.workspace}}/Build
-      run: ctest -C $BUILD_TYPE
+      run: ctest -C Release
