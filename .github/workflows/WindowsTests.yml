@@ -3,7 +3,7 @@ name: Windows Tests
 on: [push]
 
 jobs:
-  Build:
+  RunTests:
     runs-on: windows-2019
     strategy:
       fail-fast: false
@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        submodules: 'true'
+        submodules: 'recursive'
 
     - name: Restore packages or run vcpkg to build and cache them
       uses: lukka/run-vcpkg@main
