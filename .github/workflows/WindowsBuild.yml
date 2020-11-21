@@ -23,6 +23,7 @@ jobs:
         vcpkgArguments: gtest
         vcpkgTriplet: x64-windows
         vcpkgDirectory: '${{runner.workspace}}/Cache/vcpkg'
+        vcpkgCommitId: '42456b785a4508386f080ae8fad2642e056b747d'
 
     - name: Prints outputs of run-vcpkg task
       run: echo "'${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT}}' '${{steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT}}' "
