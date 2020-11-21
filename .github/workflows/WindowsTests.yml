@@ -42,4 +42,4 @@ jobs:
 
     - name: Run tests
       working-directory: ${{github.workspace}}/Build
-      run: ctest
+      run: ctest -C $BUILD_TYPE
