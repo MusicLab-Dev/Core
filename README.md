@@ -2,6 +2,6 @@
 
 [![Linux Tests](https://github.com/MusicLab-Dev/Core/workflows/Linux%20Tests/badge.svg)](https://github.com/MusicLab-Dev/Core/actions?query=workflow%3A%22Linux+Tests%22) [![codecov](https://codecov.io/gh/MusicLab-Dev/Core/badge.svg?token=A1X07ATIRC)](https://codecov.io/gh/MusicLab-Dev/Core)
 
-[![Windows Build](https://github.com/MusicLab-Dev/Core/workflows/Windows%20Build/badge.svg)](https://github.com/MusicLab-Dev/Core/actions?query=workflow%3A%22Windows+Build%22)
+[![Windows Tests](https://github.com/MusicLab-Dev/Core/workflows/Windows%20Tests/badge.svg)](https://github.com/MusicLab-Dev/Core/actions?query=workflow%3A%22Windows+Tests%22)
 
 # Core library
