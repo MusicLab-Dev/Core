@@ -16,7 +16,9 @@ set(CoreSources
     ${CoreDir}/Core.cpp
 )
 
-add_library(${CMAKE_PROJECT_NAME} ${CoreSources})
+add_library(${PROJECT_NAME} ${CoreSources})
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CoreDir}/..)
 
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CoreDir}/..)
 

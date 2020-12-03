@@ -8,6 +8,11 @@
 #include <Core/Vector.hpp>
 #include <Core/FlatVector.hpp>
 
+<<<<<<< HEAD
+=======
+using namespace Core;
+
+>>>>>>> 5ec5f7a15dff605e698a184113584bc7917e3728
 #define GENERATE_VECTOR_TESTS(Vector) \
 TEST(Vector, Basics) \
 { \
@@ -207,7 +212,10 @@ TEST(Vector, Erase) \
     } \
 }
 
+<<<<<<< HEAD
 using namespace Core;
+=======
+>>>>>>> 5ec5f7a15dff605e698a184113584bc7917e3728
 
 GENERATE_VECTOR_TESTS(Vector)
 GENERATE_VECTOR_TESTS(FlatVector)
