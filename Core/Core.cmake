@@ -6,6 +6,8 @@ get_filename_component(CoreDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 set(CoreSources
     ${CoreDir}/Assert.hpp
     ${CoreDir}/Utils.hpp
+    ${CoreDir}/HeapArray.hpp
+    ${CoreDir}/HeapArray.ipp
     ${CoreDir}/VectorDetails.hpp
     ${CoreDir}/VectorDetails.ipp
     ${CoreDir}/Vector.hpp
