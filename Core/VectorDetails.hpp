@@ -54,21 +54,21 @@ public:
     /** @brief Move constructor */
     VectorDetails(VectorDetails &&other) noexcept { swap(other); }
 
-    /** @brief Insert constructor */
-    template<typename InputIterator>
-    VectorDetails(const InputIterator from, const InputIterator to)
-        noexcept(nothrow_forward_constructible(Type) && nothrow_destructible(Type))
-        { resize(from, to); }
-
     /** @brief Resize with default constructor */
     VectorDetails(const std::size_t count)
-        noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type))
+        noexcept(nothrow_constructible(Type) && nothrow_destructible(Type))
         { resize(count); }
 
     /** @brief Resize with copy constructor */
     VectorDetails(const std::size_t count, const Type &value)
         noexcept(nothrow_copy_constructible(Type) && nothrow_destructible(Type))
         { resize(count, value); }
+
+    /** @brief Insert constructor */
+    template<typename InputIterator>
+    VectorDetails(const InputIterator from, const InputIterator to)
+        noexcept(nothrow_forward_iterator_constructible(InputIterator) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
+        { resize(from, to); }
 
     /** @brief Initializer list constructor */
     VectorDetails(std::initializer_list<Type> init) noexcept_forward_constructible(Type)
