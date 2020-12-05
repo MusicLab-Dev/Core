@@ -13,6 +13,11 @@ set(CoreSources
     ${CoreDir}/FlatVector.hpp
     ${CoreDir}/FlatString.hpp
     ${CoreDir}/Core.cpp
+    ${CoreDir}/Functor.hpp
+    ${CoreDir}/TrivialFunctor.hpp
+    ${CoreDir}/DispatcherDetails.hpp
+    ${CoreDir}/Dispatcher.hpp
+    ${CoreDir}/TrivialDispatcher.hpp
 )
 
 add_library(${PROJECT_NAME} ${CoreSources})
