@@ -12,7 +12,6 @@ set(CoreSources
     ${CoreDir}/Vector.ipp
     ${CoreDir}/FlatVector.hpp
     ${CoreDir}/FlatString.hpp
-    ${CoreDir}/FlatString.ipp
     ${CoreDir}/Core.cpp
 )
 
@@ -20,6 +19,4 @@ add_library(${PROJECT_NAME} ${CoreSources})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CoreDir}/..)
 
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CoreDir}/..)
-
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC coverage_config)
+target_link_libraries(${PROJECT_NAME} PUBLIC coverage_config)
