@@ -20,6 +20,10 @@ set(CoreSources
     ${CoreDir}/DispatcherDetails.hpp
     ${CoreDir}/Dispatcher.hpp
     ${CoreDir}/TrivialDispatcher.hpp
+    ${CoreDir}/SPSCQueue.hpp
+    ${CoreDir}/SPSCQueue.ipp
+    ${CoreDir}/MPMCQueue.hpp
+    ${CoreDir}/MPMCQueue.ipp
 )
 
 add_library(${PROJECT_NAME} ${CoreSources})

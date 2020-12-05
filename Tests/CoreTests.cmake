@@ -12,6 +12,8 @@ set(CoreTestsSources
     ${CoreTestsDir}/tests_Functor.cpp
     ${CoreTestsDir}/tests_TrivialFunctor.cpp
     ${CoreTestsDir}/tests_Dispatcher.cpp
+    ${CoreTestsDir}/tests_SPSCQueue.cpp
+    ${CoreTestsDir}/tests_MPMCQueue.cpp
 )
 
 add_executable(${PROJECT_NAME} ${CoreTestsSources})
