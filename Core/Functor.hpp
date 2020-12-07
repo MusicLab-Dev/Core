@@ -81,18 +81,22 @@ public:
     Functor &operator=(Functor &&other) noexcept
     {
         destroy();
-        if (other._destruct) {
-            _invoke = other._invoke;
-            _destruct = other._destruct;
-        } else {
-            _invoke = other._invoke;
-            _destruct = nullptr;
-            _cache = other._cache;
-        }
+        _invoke = other._invoke;
+        _destruct = other._destruct;
+        _cache = other._cache;
         other._invoke = nullptr;
         other._destruct = nullptr;
         return *this;
     }
+
+    /** @brief Prepare constructor, limited to runtime functors due to template constructor restrictions */
+    template<typename ClassFunctor, std::enable_if_t<
+            !std::is_same_v<Functor, std::remove_reference_t<std::remove_const_t<ClassFunctor>>> &&
+            Internal::FunctorInvocable<ClassFunctor, Return, Args...>
+        >* = nullptr>
+    Functor &operator=(ClassFunctor &&functor) noexcept_forward_constructible(decltype(functor))
+        { prepare(std::forward<ClassFunctor>(functor)); return *this; }
+
 
     /** @brief Check if the functor is prepared */
     [[nodiscard]] operator bool(void) const noexcept { return _invoke; }
