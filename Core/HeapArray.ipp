@@ -13,8 +13,8 @@ std::enable_if_t<std::is_constructible_v<Type, Args...>, void>
         for (auto &elem : *this)
             elem.~Type();
     }
-    if (size && _size != size) [[likely]] {
-        if (_size) [[unlikely]]
+    if (size && _size != size) {
+        if (_size)
             std::free(_data);
         _data = reinterpret_cast<Type *>(std::malloc(sizeof(Type) * size));
         coreAssert(_data,
@@ -28,7 +28,7 @@ std::enable_if_t<std::is_constructible_v<Type, Args...>, void>
 template<typename Type>
 inline void Core::HeapArray<Type>::release(void) noexcept_destructible(Type)
 {
-    if (!_data) [[unlikely]]
+    if (!_data)
         return;
     if constexpr (!std::is_trivially_destructible_v<Type>) {
         for (auto &elem : *this)

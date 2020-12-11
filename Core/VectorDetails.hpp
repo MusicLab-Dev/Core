@@ -56,7 +56,7 @@ public:
 
     /** @brief Resize with default constructor */
     VectorDetails(const std::size_t count)
-        noexcept(nothrow_constructible(Type) && nothrow_destructible(Type))
+        noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type))
         { resize(count); }
 
     /** @brief Resize with copy constructor */
@@ -120,7 +120,7 @@ public:
     /** @brief Push an element into the vector */
     template<typename ...Args>
     Type &push(Args &&...args)
-        noexcept(std::is_nothrow_constructible_v<Type, Args...> && nothrow_destructible(Type));
+        noexcept(nothrow_constructible(Type, Args...) && nothrow_destructible(Type));
 
     /** @brief Pop the last element of the vector */
     void pop(void) noexcept_destructible(Type);
@@ -159,7 +159,7 @@ public:
 
     /** @brief Resize the vector using default constructor to initialize each element */
     void resize(const std::size_t count)
-        noexcept(std::is_nothrow_constructible_v<Type> && nothrow_destructible(Type));
+        noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type));
 
     /** @brief Resize the vector by copying given element */
     void resize(const std::size_t count, const Type &type)

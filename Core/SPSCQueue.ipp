@@ -27,11 +27,11 @@ inline std::enable_if_t<std::is_constructible_v<Type, Args...>, bool>
     const auto tail = _tail.load(std::memory_order_relaxed);
     auto next = tail + 1;
 
-    if (next == _tailCache.buffer.capacity) [[unlikely]]
+    if (next == _tailCache.buffer.capacity)
         next = 0;
-    if (auto head = _tailCache.value; next == head) [[unlikely]] {
+    if (auto head = _tailCache.value; next == head) {
         head = _tailCache.value = _head.load(std::memory_order_acquire);
-        if (next == head) [[unlikely]]
+        if (next == head)
             return false;
     }
     new (_tailCache.buffer.data + tail) Type { std::forward<Args>(args)... };
@@ -45,14 +45,14 @@ inline bool Core::SPSCQueue<Type>::pop(Type &value)
 {
     const auto head = _head.load(std::memory_order_relaxed);
 
-    if (auto tail = _headCache.value; head == tail) [[unlikely]] {
+    if (auto tail = _headCache.value; head == tail) {
         tail = _headCache.value = _tail.load(std::memory_order_acquire);
-        if (head == tail) [[unlikely]]
+        if (head == tail)
             return false;
     }
     auto *elem = reinterpret_cast<Type *>(_headCache.buffer.data + head);
     auto next = head + 1;
-    if (next == _headCache.buffer.capacity) [[unlikely]]
+    if (next == _headCache.buffer.capacity)
         next = 0;
     if constexpr (std::is_move_assignable_v<Type>)
         value = std::move(*elem);
@@ -74,14 +74,14 @@ inline std::size_t Core::SPSCQueue<Type>::pushRangeImpl(const InputIterator from
     auto head = _tailCache.value;
     auto available = capacity - (tail - head);
 
-    if (available > capacity) [[unlikely]]
+    if (available > capacity)
         available -= capacity;
-    if (toPush >= available) [[unlikely]] {
+    if (toPush >= available) {
         head = _tailCache.value = _head.load(std::memory_order_acquire);
         available = capacity - (tail - head);
-        if (available > capacity) [[unlikely]]
+        if (available > capacity)
             available -= capacity;
-        if (toPush >= available) [[unlikely]] {
+        if (toPush >= available) {
             if constexpr (AllowLess)
                 toPush = available - 1;
             else
@@ -89,7 +89,7 @@ inline std::size_t Core::SPSCQueue<Type>::pushRangeImpl(const InputIterator from
         }
     }
     auto next = tail + toPush;
-    if (next >= capacity) [[unlikely]] {
+    if (next >= capacity) {
         next -= capacity;
         const auto split = toPush - next;
         std::uninitialized_move_n(from, split, _tailCache.buffer.data + tail);
@@ -115,14 +115,14 @@ inline std::size_t Core::SPSCQueue<Type>::popRangeImpl(const OutputIterator from
     auto tail = _headCache.value;
     auto available = tail - head;
 
-    if (available > capacity) [[unlikely]]
+    if (available > capacity)
         available += capacity;
-    if (toPop >= available) [[unlikely]] {
+    if (toPop >= available) {
         tail = _headCache.value = _tail.load(std::memory_order_acquire);
         available = tail - head;
-        if (available > capacity) [[unlikely]]
+        if (available > capacity)
             available += capacity;
-        if (toPop > available) [[unlikely]] {
+        if (toPop > available) {
             if constexpr (AllowLess)
                 toPop = available;
             else
@@ -130,7 +130,7 @@ inline std::size_t Core::SPSCQueue<Type>::popRangeImpl(const OutputIterator from
         }
     }
     auto next = head + toPop;
-    if (next >= capacity) [[unlikely]] {
+    if (next >= capacity) {
         next -= capacity;
         const auto split = toPop - next;
         std::copy_n(std::make_move_iterator(_headCache.buffer.data + head), split, from);
@@ -158,7 +158,7 @@ inline std::size_t Core::SPSCQueue<Type>::size(void) const noexcept
     const auto capacity = _tailCache.buffer.capacity;
     const auto head = _head.load(std::memory_order_seq_cst);
     auto available = tail - head;
-    if (available > capacity) [[unlikely]]
+    if (available > capacity)
         available += capacity;
     return available;
 }

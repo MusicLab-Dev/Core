@@ -6,7 +6,7 @@
 template<typename Base, typename Type, typename Range>
 template<typename ...Args>
 inline Type &Core::Internal::VectorDetails<Base, Type, Range>::push(Args &&...args)
-    noexcept(std::is_nothrow_constructible_v<Type, Args...> && nothrow_destructible(Type))
+    noexcept(nothrow_constructible(Type, Args...) && nothrow_destructible(Type))
 {
     if (!data())
         reserve(2);
@@ -130,7 +130,7 @@ inline void Core::Internal::VectorDetails<Base, Type, Range>::erase(const Iterat
 
 template<typename Base, typename Type, typename Range>
 inline void Core::Internal::VectorDetails<Base, Type, Range>::resize(const std::size_t count)
-    noexcept(std::is_nothrow_constructible_v<Type> && nothrow_destructible(Type))
+    noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type))
 {
     if (!count) {
         clear();

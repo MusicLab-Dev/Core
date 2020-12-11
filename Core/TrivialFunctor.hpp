@@ -17,7 +17,7 @@ namespace Core
         /** @brief Ensure that a given functor met the trivial requirements of TrivialFunctor */
         template<typename Functor, std::size_t CacheSize>
         constexpr bool TrivialFunctorRequirements =
-            std::conjunction_v<std::is_trivial<Functor>, std::bool_constant<sizeof(Functor) <= CacheSize>>;
+            std::conjunction_v<std::is_trivially_copyable<Functor>, std::bool_constant<sizeof(Functor) <= CacheSize>>;
 
         /** @brief Ensure that a given functor / function is callable */
         template<typename Functor, typename Return, typename ...Args>
@@ -59,7 +59,7 @@ public:
     /** @brief Prepare constructor, limited to runtime functors due to template constructor restrictions */
     template<typename ClassFunctor, std::enable_if_t<
             !std::is_same_v<TrivialFunctor, std::remove_reference_t<std::remove_const_t<ClassFunctor>>> &&
-            Internal::TrivialFunctorInvocable<ClassFunctor, Return, Args...>
+            Internal::TrivialFunctorRequirements<ClassFunctor, CacheSize> && Internal::TrivialFunctorInvocable<ClassFunctor, Return, Args...>
         >* = nullptr>
     TrivialFunctor(ClassFunctor &&functor) noexcept { prepare(std::forward<ClassFunctor>(functor)); }
 

@@ -18,11 +18,11 @@ namespace Core
     {
         /** @brief Ensure that a given functor met the trivial requirements of Functor */
         template<typename Functor, std::size_t CacheSize>
-        constexpr bool FunctorCacheRequirements = std::is_trivial_v<Functor> && sizeof(Functor) <= CacheSize;
+        constexpr bool FunctorCacheRequirements = std::is_trivially_copyable_v<Functor> && sizeof(Functor) <= CacheSize;
 
         /** @brief Ensure that a given functor DOES NOT met the trivial requirements of Functor */
         template<typename Functor, std::size_t CacheSize>
-        constexpr bool FunctorNoCacheRequirements = (std::is_trivial_v<Functor> ? sizeof(Functor) > CacheSize : true);
+        constexpr bool FunctorNoCacheRequirements = (std::is_trivially_copyable_v<Functor> ? sizeof(Functor) > CacheSize : true);
 
         /** @brief Ensure that a given functor / function is callable */
         template<typename Functor, typename Return, typename ...Args>

@@ -47,10 +47,10 @@ inline std::enable_if_t<std::is_constructible_v<Type, Args...>, bool>
     while (true) {
         cell = &data[pos & mask];
         const auto sequence = cell->sequence.load(std::memory_order_acquire);
-        if (sequence == pos) [[likely]] {
-            if (_tail.compare_exchange_weak(pos, pos + 1, std::memory_order_relaxed)) [[likely]]
+        if (sequence == pos) {
+            if (_tail.compare_exchange_weak(pos, pos + 1, std::memory_order_relaxed))
                 break;
-        } else if (sequence < pos) [[unlikely]]
+        } else if (sequence < pos)
             return false;
         else
             pos = _tail.load(std::memory_order_relaxed);
@@ -76,10 +76,10 @@ inline bool Core::MPMCQueue<Type>::pop(Type &value)
         cell = &data[pos & mask];
         const auto sequence = cell->sequence.load(std::memory_order_acquire);
         const auto next = pos + 1;
-        if (sequence == next) [[likely]] {
-            if (_head.compare_exchange_weak(pos, next, std::memory_order_relaxed)) [[likely]]
+        if (sequence == next) {
+            if (_head.compare_exchange_weak(pos, next, std::memory_order_relaxed))
                 break;
-        } else if (sequence < next) [[unlikely]]
+        } else if (sequence < next)
             return false;
         else
             pos = _head.load(std::memory_order_relaxed);

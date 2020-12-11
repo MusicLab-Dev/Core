@@ -73,7 +73,7 @@ TEST(SPSCQueue, IntensiveThreading)
 
     Core::SPSCQueue<int> queue(queueSize);
 
-    std::thread thd([&queue] {
+    std::thread thd([&] {
         for (auto i = 0; i < Counter; i += queue.push(i));
     });
 

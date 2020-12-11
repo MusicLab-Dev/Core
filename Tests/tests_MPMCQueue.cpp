@@ -46,14 +46,14 @@ TEST(MPMCQueue, IntensiveThreading)
     Core::MPMCQueue<int> queue(queueSize);
 
     for (auto i = 0; i < ThreadCount; ++i)
-        pushThds[i] = std::thread([&queue] {
+        pushThds[i] = std::thread([&] {
             ++pushingThds;
             for (auto i = 0; i < Counter / ThreadCount;)
                 i += queue.push(i);
             --pushingThds;
         });
     for (auto i = 0; i < ThreadCount; ++i)
-        popThds[i] = std::thread([&queue] {
+        popThds[i] = std::thread([&] {
             while (running) {
                 int tmp = 0;
                 while (queue.pop(tmp))
