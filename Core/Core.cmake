@@ -6,14 +6,24 @@ get_filename_component(CoreDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 set(CoreSources
     ${CoreDir}/Assert.hpp
     ${CoreDir}/Utils.hpp
+    ${CoreDir}/HeapArray.hpp
+    ${CoreDir}/HeapArray.ipp
     ${CoreDir}/VectorDetails.hpp
     ${CoreDir}/VectorDetails.ipp
     ${CoreDir}/Vector.hpp
     ${CoreDir}/Vector.ipp
     ${CoreDir}/FlatVector.hpp
     ${CoreDir}/FlatString.hpp
-    ${CoreDir}/FlatString.ipp
     ${CoreDir}/Core.cpp
+    ${CoreDir}/Functor.hpp
+    ${CoreDir}/TrivialFunctor.hpp
+    ${CoreDir}/DispatcherDetails.hpp
+    ${CoreDir}/Dispatcher.hpp
+    ${CoreDir}/TrivialDispatcher.hpp
+    ${CoreDir}/SPSCQueue.hpp
+    ${CoreDir}/SPSCQueue.ipp
+    ${CoreDir}/MPMCQueue.hpp
+    ${CoreDir}/MPMCQueue.ipp
 )
 
 add_library(${PROJECT_NAME} ${CoreSources})

@@ -1,13 +1,12 @@
 /**
  * @ Author: Matthieu Moinvaziri
- * @ Description: Tests of the single consumer concurrent queue
+ * @ Description: Vector unit tests
  */
+
 #include <gtest/gtest.h>
 
 #include <Core/Vector.hpp>
 #include <Core/FlatVector.hpp>
-
-using namespace Core;
 
 #define GENERATE_VECTOR_TESTS(Vector) \
 TEST(Vector, Basics) \
@@ -61,6 +60,16 @@ TEST(Vector, Pop) \
         vector.pop(); \
     } \
     ASSERT_EQ(vector.size(), 0); \
+} \
+ \
+TEST(Vector, NullResize) \
+{ \
+    Vector<int> vector(0); \
+    ASSERT_EQ(vector.size(), 0); \
+    ASSERT_EQ(vector.capacity(), 0); \
+    vector.resize(0, 0); \
+    ASSERT_EQ(vector.size(), 0); \
+    ASSERT_EQ(vector.capacity(), 0); \
 } \
  \
 TEST(Vector, Resize) \
@@ -198,6 +207,7 @@ TEST(Vector, Erase) \
     } \
 }
 
+using namespace Core;
 
 GENERATE_VECTOR_TESTS(Vector)
 GENERATE_VECTOR_TESTS(FlatVector)

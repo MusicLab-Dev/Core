@@ -7,7 +7,13 @@ get_filename_component(CoreTestsDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 set(CoreTestsSources
     ${CoreTestsDir}/tests_Vector.cpp
     ${CoreTestsDir}/tests_FlatString.cpp
+    ${CoreTestsDir}/tests_HeapArray.cpp
     ${CoreTestsDir}/tests_UniqueAlloc.cpp
+    ${CoreTestsDir}/tests_Functor.cpp
+    ${CoreTestsDir}/tests_TrivialFunctor.cpp
+    ${CoreTestsDir}/tests_Dispatcher.cpp
+    ${CoreTestsDir}/tests_SPSCQueue.cpp
+    ${CoreTestsDir}/tests_MPMCQueue.cpp
 )
 
 add_executable(${PROJECT_NAME} ${CoreTestsSources})
