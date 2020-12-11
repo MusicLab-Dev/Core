@@ -120,7 +120,7 @@ inline void Core::Internal::VectorDetails<Base, Type, Range>::erase(const Iterat
     if (from == to)
         return;
     const auto end = endUnsafe();
-    setSize(sizeUnsafe() - std::distance(from, to));
+    setSize(sizeUnsafe() - static_cast<Range>(std::distance(from, to)));
     if constexpr (std::is_move_assignable_v<Type> && !Utils::IsMoveIterator<Iterator>::Value)
         std::copy(std::make_move_iterator(to), std::make_move_iterator(end), from);
     else
@@ -168,7 +168,7 @@ inline std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<Inp
     Core::Internal::VectorDetails<Base, Type, Range>::resize(const InputIterator from, const InputIterator to)
     noexcept(nothrow_destructible(Type) && nothrow_forward_iterator_constructible(InputIterator))
 {
-    const std::size_t count = std::distance(from, to);
+    const auto count = static_cast<Range>(std::distance(from, to));
 
     if (!count) {
         clear();
