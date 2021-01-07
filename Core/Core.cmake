@@ -6,13 +6,25 @@ get_filename_component(CoreDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 set(CoreSources
     ${CoreDir}/Assert.hpp
     ${CoreDir}/Utils.hpp
+    ${CoreDir}/Utils.ipp
     ${CoreDir}/HeapArray.hpp
     ${CoreDir}/HeapArray.ipp
     ${CoreDir}/VectorDetails.hpp
     ${CoreDir}/VectorDetails.ipp
+    ${CoreDir}/SortedVectorDetails.hpp
+    ${CoreDir}/SortedVectorDetails.ipp
+    ${CoreDir}/VectorBase.hpp
+    ${CoreDir}/VectorBase.ipp
     ${CoreDir}/Vector.hpp
-    ${CoreDir}/Vector.ipp
+    ${CoreDir}/SortedVector.hpp
+    ${CoreDir}/FlatVectorBase.hpp
+    ${CoreDir}/FlatVectorBase.ipp
     ${CoreDir}/FlatVector.hpp
+    ${CoreDir}/SortedFlatVector.hpp
+    ${CoreDir}/SmallVectorBase.hpp
+    ${CoreDir}/SmallVectorBase.ipp
+    ${CoreDir}/SmallVector.hpp
+    ${CoreDir}/SortedSmallVector.hpp
     ${CoreDir}/FlatString.hpp
     ${CoreDir}/Core.cpp
     ${CoreDir}/Functor.hpp
