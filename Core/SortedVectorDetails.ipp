@@ -16,7 +16,7 @@ inline Type &Core::Internal::SortedVectorDetails<Base, Type, Range, Compare, IsS
 
 template<typename Base, typename Type, typename Range, typename Compare, bool IsSmallOptimized>
 inline void Core::Internal::SortedVectorDetails<Base, Type, Range, Compare, IsSmallOptimized>::insertDefault(const Range count)
-    noexcept(nothrow_constructible(Type) && nothrow_destructible(Type))
+    noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type))
 {
     if (count)
         DetailsBase::insertDefault(findSortedPlacement(Type{}), count);

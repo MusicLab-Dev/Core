@@ -37,7 +37,7 @@ public:
 
     /** @brief Resize with default constructor */
     SortedVectorDetails(const Range count)
-        noexcept(nothrow_constructible(Type) && nothrow_destructible(Type))
+        noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type))
         { resize(count); }
 
     /** @brief Resize with copy constructor */
@@ -78,7 +78,7 @@ public:
 
     /** @brief Insert a range of default initialized values */
     void insertDefault(const Range count)
-        noexcept(nothrow_constructible(Type) && nothrow_destructible(Type));
+        noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type));
 
     /** @brief Insert a range of copies */
     void insertCopy(const Range count, const Type &value);
@@ -107,7 +107,7 @@ public:
 
     /** @brief Resize the vector using default constructor to initialize each element */
     void resize(const Range count)
-        noexcept(nothrow_destructible(Type) && nothrow_constructible(Type))
+        noexcept(nothrow_destructible(Type) && nothrow_default_constructible(Type))
         { DetailsBase::resize(count); }
 
     /** @brief Resize the vector by copying given element */

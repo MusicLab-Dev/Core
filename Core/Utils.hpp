@@ -116,7 +116,7 @@ namespace Core
 
         /** @brief Similar to std::aligned_alloc, but ensure arguments, you must use AlignedFree to free the memory */
         template<typename Cast = void>
-        [[nodiscard]] Cast *AlignedAlloc(const std::size_t bytes, const std::size_t alignement) noexcept;
+        [[nodiscard]] Cast *AlignedAlloc(const std::size_t bytes, const std::size_t alignment) noexcept;
 
         /**  @brief Free a pointer allocated with AlignedAlloc */
         void AlignedFree(void *data) noexcept;

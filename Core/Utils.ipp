@@ -18,13 +18,13 @@ inline Cast *Core::Utils::AlignedAlloc(const std::size_t bytes) noexcept
 }
 
 template<typename Cast>
-inline Cast *Core::Utils::AlignedAlloc(const std::size_t bytes, [[maybe_unused]] const std::size_t alignement) noexcept
+inline Cast *Core::Utils::AlignedAlloc(const std::size_t bytes, [[maybe_unused]] const std::size_t alignment) noexcept
 {
 #ifdef _WIN32
     return reinterpret_cast<Cast *>(std::malloc(bytes));
 #else
     const auto align = std::max(alignof(std::size_t), alignment);
-    return reinterpret_cast<Cast *>(std::aligned_alloc(alignb, (bytes + alignb - 1) & -alignb));
+    return reinterpret_cast<Cast *>(std::aligned_alloc(align, (bytes + align - 1) & -align));
 #endif
 }
 
