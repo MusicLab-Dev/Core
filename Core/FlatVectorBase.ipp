@@ -6,7 +6,7 @@
 template<typename Type, typename Range>
 inline const Type *Core::Internal::FlatVectorBase<Type, Range>::data(void) const noexcept
 {
-    if (_ptr) [[likely]]
+    if (_ptr)
         return dataUnsafe();
     else
         return nullptr;

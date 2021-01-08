@@ -14,7 +14,7 @@
 #define GENERATE_VECTOR_TESTS(Vector, ...) \
 TEST(Vector, Basics) \
 { \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> vector(0); \
+    Vector<std::size_t , __VA_ARGS__> vector(0); \
     ASSERT_EQ(vector.size(), 0); \
     ASSERT_EQ(vector.capacity(), 0); \
 } \
@@ -22,7 +22,7 @@ TEST(Vector, Basics) \
 TEST(Vector, Semantics) \
 { \
     for (auto i = 1; i < 15; ++i) { \
-        Vector<std::string __VA_OPT__(,) __VA_ARGS__> vector(i, "Hello World 123456789"); \
+        Vector<std::string , __VA_ARGS__> vector(i, "Hello World 123456789"); \
         auto copy1(vector); \
         auto copy2 = copy1; \
         auto tmp1 = copy2; \
@@ -41,7 +41,7 @@ TEST(Vector, Semantics) \
 TEST(Vector, Push) \
 { \
     constexpr auto count = 42ul; \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> vector; \
+    Vector<std::size_t , __VA_ARGS__> vector; \
  \
     ASSERT_FALSE(vector); \
     for (auto i = 0ul, j = count; i < count; ++i, --j) { \
@@ -58,7 +58,7 @@ TEST(Vector, Push) \
  \
 TEST(Vector, Insert) \
 { \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> vector; \
+    Vector<std::size_t , __VA_ARGS__> vector; \
     auto tmp = { "42", "42" }; \
  \
     vector.insertDefault(2u); \
@@ -104,7 +104,7 @@ TEST(Vector, Insert) \
  \
 TEST(Vector, Resize) \
 { \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> vector; \
+    Vector<std::size_t , __VA_ARGS__> vector; \
  \
     vector.resize(4); \
     ASSERT_EQ(vector.size(), 4); \
@@ -145,19 +145,19 @@ TEST(Vector, NullArgs) \
     std::size_t *ptr = nullptr; \
     std::string *strPtr = nullptr; \
  \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> a(0u); \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> b(0u, 42u); \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> c(ptr, ptr); \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> d(strPtr, strPtr, [](auto &x) { return std::stoul(x); }); \
+    Vector<std::size_t , __VA_ARGS__> a(0u); \
+    Vector<std::size_t , __VA_ARGS__> b(0u, 42u); \
+    Vector<std::size_t , __VA_ARGS__> c(ptr, ptr); \
+    Vector<std::size_t , __VA_ARGS__> d(strPtr, strPtr, [](auto &x) { return std::stoul(x); }); \
     ASSERT_EQ(a.size(), 0ul); ASSERT_TRUE(a.empty()); \
     ASSERT_EQ(b.size(), 0ul); ASSERT_TRUE(b.empty()); \
     ASSERT_EQ(c.size(), 0ul); ASSERT_TRUE(c.empty()); \
     ASSERT_EQ(d.size(), 0ul); ASSERT_TRUE(d.empty()); \
  \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> e; \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> f; \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> g; \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> h; \
+    Vector<std::size_t , __VA_ARGS__> e; \
+    Vector<std::size_t , __VA_ARGS__> f; \
+    Vector<std::size_t , __VA_ARGS__> g; \
+    Vector<std::size_t , __VA_ARGS__> h; \
     e.insertDefault(0u); \
     f.insertCopy(0u, 42u); \
     g.insert(ptr, ptr); \

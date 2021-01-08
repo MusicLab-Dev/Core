@@ -14,7 +14,7 @@
 #define GENERATE_VECTOR_TESTS(Vector, ...) \
 TEST(Vector, Basics) \
 { \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> vector(0); \
+    Vector<std::size_t , __VA_ARGS__> vector(0); \
     ASSERT_EQ(vector.size(), 0); \
     ASSERT_EQ(vector.capacity(), 0); \
 } \
@@ -22,7 +22,7 @@ TEST(Vector, Basics) \
 TEST(Vector, Semantics) \
 { \
     for (auto i = 1; i < 15; ++i) { \
-        Vector<std::string __VA_OPT__(,) __VA_ARGS__> vector(i, "Hello World 123456789"); \
+        Vector<std::string , __VA_ARGS__> vector(i, "Hello World 123456789"); \
         auto copy1(vector); \
         auto copy2 = copy1; \
         auto tmp1 = copy2; \
@@ -41,7 +41,7 @@ TEST(Vector, Semantics) \
 TEST(Vector, Push) \
 { \
     constexpr auto count = 42ul; \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> vector; \
+    Vector<std::size_t , __VA_ARGS__> vector; \
  \
     ASSERT_FALSE(vector); \
     for (auto i = 0ul; i < count; ++i) { \
@@ -73,7 +73,7 @@ TEST(Vector, Push) \
 TEST(Vector, Pop) \
 { \
     constexpr auto count = 42ul; \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> vector(count, 0ul); \
+    Vector<std::size_t , __VA_ARGS__> vector(count, 0ul); \
  \
     ASSERT_TRUE(vector); \
     ASSERT_EQ(vector.size(), count); \
@@ -86,7 +86,7 @@ TEST(Vector, Pop) \
  \
 TEST(Vector, NullResize) \
 { \
-    Vector<int __VA_OPT__(,) __VA_ARGS__> vector(0); \
+    Vector<int , __VA_ARGS__> vector(0); \
     ASSERT_EQ(vector.size(), 0); \
     ASSERT_EQ(vector.capacity(), 0); \
     vector.resize(0, 0); \
@@ -100,7 +100,7 @@ TEST(Vector, Resize) \
     constexpr auto str2 = "Hello"; \
     constexpr auto count = 4ul; \
  \
-    Vector<std::string __VA_OPT__(,) __VA_ARGS__> vector(count, str); \
+    Vector<std::string , __VA_ARGS__> vector(count, str); \
     ASSERT_EQ(vector.size(), count); \
     ASSERT_EQ(vector.capacity(), count); \
     auto i = 0ul; \
@@ -132,7 +132,7 @@ TEST(Vector, Reserve) \
     constexpr auto str = "Vector is an amazing 8 bytes vector !"; \
     constexpr auto count = 4ul; \
  \
-    Vector<std::string __VA_OPT__(,) __VA_ARGS__> vector; \
+    Vector<std::string , __VA_ARGS__> vector; \
  \
     vector.reserve(count); \
     ASSERT_EQ(vector.size(), 0); \
@@ -149,7 +149,7 @@ TEST(Vector, InsertIterators) \
 { \
     std::vector<int> tmp(10, 42); \
     std::vector<int> tmp2(5, 32); \
-    Vector<int __VA_OPT__(,) __VA_ARGS__> vector(tmp.begin(), tmp.end()); \
+    Vector<int , __VA_ARGS__> vector(tmp.begin(), tmp.end()); \
  \
     ASSERT_EQ(vector.size(), 10ul); \
     for (auto elem : vector) \
@@ -168,7 +168,7 @@ TEST(Vector, InsertMap) \
 { \
     std::vector<std::string> tmp(10, "42"); \
     std::vector<std::string> tmp2(5, "32"); \
-    Vector<int __VA_OPT__(,) __VA_ARGS__> vector(tmp.begin(), tmp.end(), [](const auto &str) { \
+    Vector<int , __VA_ARGS__> vector(tmp.begin(), tmp.end(), [](const auto &str) { \
         return std::stoi(str); \
     }); \
  \
@@ -187,7 +187,7 @@ TEST(Vector, InsertMap) \
  \
 TEST(Vector, InsertFill) \
 { \
-    Vector<int __VA_OPT__(,) __VA_ARGS__> vector; \
+    Vector<int , __VA_ARGS__> vector; \
  \
     vector.insertCopy(vector.begin(), 2, 42); \
     ASSERT_EQ(vector.size(), 2); \
@@ -207,7 +207,7 @@ TEST(Vector, Clear) \
     constexpr auto count = 42; \
     constexpr auto value1 = 24; \
     constexpr auto value2 = 42; \
-    Vector<int __VA_OPT__(,) __VA_ARGS__> vector(count, value1); \
+    Vector<int , __VA_ARGS__> vector(count, value1); \
     auto *data = vector.data(); \
     for (auto i = 0u; i < count; ++i) \
         ASSERT_EQ(data[i], value1); \
@@ -225,7 +225,7 @@ TEST(Vector, Erase) \
     constexpr auto count = 10ul; \
  \
     constexpr auto Get = [](const std::size_t count) { \
-        Vector<int __VA_OPT__(,) __VA_ARGS__> vector(count); \
+        Vector<int , __VA_ARGS__> vector(count); \
         for (auto i = 0u; i < count; ++i) \
             vector[i] = i; \
         return vector; \
@@ -255,7 +255,7 @@ TEST(Vector, Erase) \
 TEST(Vector, Find) \
 { \
     constexpr auto count = 42ul; \
-    Vector<std::size_t __VA_OPT__(,) __VA_ARGS__> vector; \
+    Vector<std::size_t , __VA_ARGS__> vector; \
  \
     ASSERT_FALSE(vector); \
     for (auto i = 0ul; i < count; ++i) { \

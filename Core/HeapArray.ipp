@@ -15,8 +15,8 @@ std::enable_if_t<std::is_constructible_v<Type, Args...>, void>
     }
     if (size && _size != size) {
         if (_size)
-            std::free(_data);
-        _data = reinterpret_cast<Type *>(std::malloc(sizeof(Type) * size));
+            Utils::AlignedFree(_data);
+        _data = reinterpret_cast<Type *>(Utils::AlignedAlloc<alignof(Type)>(sizeof(Type) * size));
         coreAssert(_data,
             throw std::runtime_error("Core::HeapArray::allocate: Malloc failed"));
     }
@@ -34,7 +34,7 @@ inline void Core::HeapArray<Type>::release(void) noexcept_destructible(Type)
         for (auto &elem : *this)
             elem.~Type();
     }
-    std::free(_data);
+    Utils::AlignedFree(_data);
     _data = nullptr;
     _size = 0;
 }
