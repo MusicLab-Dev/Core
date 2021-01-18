@@ -98,10 +98,10 @@ public:
     [[nodiscard]] bool operator!=(const std::basic_string_view<Type> &other) const noexcept { return !operator==(other); }
 
     /** @brief Get a std::string from the object */
-    [[nodiscard]] std::basic_string<Type> toStdView(void) const noexcept { return std::basic_string<Type>(data(), size()); }
+    [[nodiscard]] std::basic_string<Type> toStdString(void) const noexcept { return std::basic_string<Type>(data(), size()); }
 
     /** @brief Get a std::string_view of the object */
-    [[nodiscard]] std::basic_string_view<Type> toStdString(void) const noexcept { return std::basic_string_view<Type>(data(), size()); }
+    [[nodiscard]] std::basic_string_view<Type> toStdView(void) const noexcept { return std::basic_string_view<Type>(data(), size()); }
 
 private:
     /** @brief Strlen but with null cstring check */
