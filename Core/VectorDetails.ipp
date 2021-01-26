@@ -249,8 +249,8 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
         return;
     const auto end = endUnsafe();
     setSize(sizeUnsafe() - std::distance(from, to));
-    std::copy(std::make_move_iterator(to), std::make_move_iterator(end), from);
-    std::destroy(to, end);
+    std::destroy(from, to);
+    std::uninitialized_move(to, end, from);
 }
 
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
