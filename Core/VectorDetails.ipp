@@ -400,6 +400,8 @@ inline bool Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
         deallocate(currentData);
         return true;
     } else {
+        if (capacity == 0)
+            return false;
         setData(allocate(capacity));
         setSize(0);
         setCapacity(capacity);
