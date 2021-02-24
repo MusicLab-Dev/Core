@@ -124,15 +124,14 @@ public:
     template<typename InputIterator, typename Map>
     void resize(InputIterator from, InputIterator to, Map &&map);
 
+    /** @brief Sort the vector */
+    void sort(void);
+
 private:
     /** @brief Reimplemented functions */
     using DetailsBase::push;
     using DetailsBase::insert;
     using DetailsBase::resize;
-
-protected:
-    /** @brief Sort the vector */
-    void sort(void);
 
     /** @brief Finds where to insert an element */
     [[nodiscard]] Iterator findSortedPlacement(const Type &value)
