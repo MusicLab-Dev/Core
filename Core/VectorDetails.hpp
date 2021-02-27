@@ -26,25 +26,25 @@ public:
     using Iterator = decltype(std::declval<Base &>().begin());
     using ConstIterator = decltype(std::declval<const Base &>().begin());
 
+    /** @brief Iterators helper types */
+    using ReverseIterator = std::reverse_iterator<Iterator>;
+    using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
+
     /** @brief All required base functions */
     using Base::data;
     using Base::dataUnsafe;
-    using Base::setData;
     using Base::size;
     using Base::sizeUnsafe;
-    using Base::setSize;
     using Base::capacity;
     using Base::capacityUnsafe;
-    using Base::setCapacity;
     using Base::begin;
     using Base::beginUnsafe;
     using Base::end;
     using Base::endUnsafe;
-    using Base::allocate;
-    using Base::deallocate;
     using Base::empty;
     using Base::steal;
     using Base::swap;
+    using Base::isSafe;
 
     /** @brief Default constructor */
     VectorDetails(void) noexcept = default;
@@ -98,12 +98,12 @@ public:
     /** @brief Begin / End helpers */
     [[nodiscard]] ConstIterator cbegin(void) const noexcept { return begin(); }
     [[nodiscard]] ConstIterator cend(void) const noexcept { return end(); }
-    [[nodiscard]] Iterator rbegin(void) noexcept { return std::make_reverse_iterator(begin()); }
-    [[nodiscard]] Iterator rend(void) noexcept { return std::make_reverse_iterator(end()); }
-    [[nodiscard]] ConstIterator rbegin(void) const noexcept { return std::make_reverse_iterator(begin()); }
-    [[nodiscard]] ConstIterator rend(void) const noexcept { return std::make_reverse_iterator(end()); }
-    [[nodiscard]] ConstIterator crbegin(void) const noexcept { return rbegin(); }
-    [[nodiscard]] ConstIterator crend(void) const noexcept { return rend(); }
+    [[nodiscard]] ReverseIterator rbegin(void) noexcept { return std::make_reverse_iterator(begin()); }
+    [[nodiscard]] ReverseIterator rend(void) noexcept { return std::make_reverse_iterator(end()); }
+    [[nodiscard]] ConstReverseIterator rbegin(void) const noexcept { return std::make_reverse_iterator(begin()); }
+    [[nodiscard]] ConstReverseIterator rend(void) const noexcept { return std::make_reverse_iterator(end()); }
+    [[nodiscard]] ConstReverseIterator crbegin(void) const noexcept { return rbegin(); }
+    [[nodiscard]] ConstReverseIterator crend(void) const noexcept { return rend(); }
 
 
     /** @brief Access element at positon */
@@ -125,7 +125,7 @@ public:
 
     /** @brief Push an element into the vector */
     template<typename ...Args>
-    Type &push(Args &&...args)
+    std::enable_if_t<std::is_constructible_v<Type, Args...>, Type &> push(Args &&...args)
         noexcept(nothrow_constructible(Type, Args...) && nothrow_forward_constructible(Type) && nothrow_destructible(Type));
 
     /** @brief Pop the last element of the vector */
@@ -157,8 +157,7 @@ public:
 
     /** @brief Insert a range of element by iterating over iterators */
     template<typename InputIterator>
-    std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<InputIterator>())>, Iterator>
-        insert(Iterator pos, InputIterator from, InputIterator to)
+    Iterator insert(Iterator pos, InputIterator from, InputIterator to)
         noexcept(nothrow_forward_iterator_constructible(InputIterator) && nothrow_forward_constructible(Type) && nothrow_destructible(Type));
 
     /** @brief Insert a range of element by using a map function over iterators */
@@ -182,7 +181,7 @@ public:
 
 
     /** @brief Resize the vector using default constructor to initialize each element */
-        void resize(const Range count)
+    void resize(const Range count)
         noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type));
 
     /** @brief Resize the vector by copying given element */
@@ -230,12 +229,10 @@ public:
 
     /** @brief Find an element with functor */
     template<typename Functor>
-    [[nodiscard]] std::enable_if_t<std::is_invocable_v<Functor, Type &>, Iterator>
-        find(Functor &&functor) noexcept
+    [[nodiscard]] Iterator find(Functor &&functor) noexcept
         { return std::find_if(begin(), end(), std::forward<Functor>(functor)); }
     template<typename Functor>
-    [[nodiscard]] std::enable_if_t<std::is_invocable_v<Functor, const Type &>, ConstIterator>
-        find(Functor &&functor) const noexcept
+    [[nodiscard]] ConstIterator find(Functor &&functor) const noexcept
         { return std::find_if(begin(), end(), std::forward<Functor>(functor)); }
 
 
@@ -243,6 +240,12 @@ public:
     void grow(const Range minimum = Range()) noexcept(nothrow_forward_constructible(Type) && nothrow_destructible(Type));
 
 protected:
+    using Base::setSize;
+    using Base::setData;
+    using Base::setCapacity;
+    using Base::allocate;
+    using Base::deallocate;
+
     /** @brief Reserve unsafe takes IsSafe as template parameter */
     template<bool IsSafe = true>
     bool reserveUnsafe(const Range capacity) noexcept(nothrow_forward_constructible(Type) && nothrow_destructible(Type));

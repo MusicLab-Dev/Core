@@ -25,6 +25,9 @@ public:
     using ConstIterator = const Type *;
 
 
+    /** @brief Always safe ! */
+    [[nodiscard]] constexpr bool isSafe(void) const noexcept { return true; }
+
     /** @brief Fast empty check */
     [[nodiscard]] bool empty(void) const noexcept { return !_size; }
 
@@ -32,13 +35,25 @@ public:
     /** @brief Get internal data pointer */
     [[nodiscard]] Type *data(void) noexcept { return dataUnsafe(); }
     [[nodiscard]] const Type *data(void) const noexcept { return dataUnsafe(); }
+    [[nodiscard]] Type *dataUnsafe(void) noexcept { return _data; }
+    [[nodiscard]] const Type *dataUnsafe(void) const noexcept { return _data; }
+
 
     /** @brief Get the size of the vector */
     [[nodiscard]] Range size(void) const noexcept { return sizeUnsafe(); }
+    [[nodiscard]] Range sizeUnsafe(void) const noexcept { return _size; }
+
 
     /** @brief Get the capacity of the vector */
     [[nodiscard]] Range capacity(void) const noexcept { return capacityUnsafe(); }
+    [[nodiscard]] Range capacityUnsafe(void) const noexcept { return _capacity; }
 
+
+    /** @brief Unsafe begin / end overloads */
+    [[nodiscard]] Iterator beginUnsafe(void) noexcept { return data(); }
+    [[nodiscard]] Iterator endUnsafe(void) noexcept { return data() + sizeUnsafe(); }
+    [[nodiscard]] ConstIterator beginUnsafe(void) const noexcept { return data(); }
+    [[nodiscard]] ConstIterator endUnsafe(void) const noexcept { return data() + sizeUnsafe(); }
 
     /** @brief Begin / end overloads */
     [[nodiscard]] Iterator begin(void) noexcept { return beginUnsafe(); }
@@ -59,13 +74,6 @@ public:
         { return _data == optimizedData(); }
 
 protected:
-    /** @brief Unsafe size getter */
-    [[nodiscard]] Range sizeUnsafe(void) const noexcept { return _size; }
-
-    /** @brief Unsafe capacity getter */
-    [[nodiscard]] Range capacityUnsafe(void) const noexcept { return _capacity; }
-
-
     /** @brief Protected data setter */
     void setData(Type * const data) noexcept { _data = data; }
 
@@ -75,35 +83,24 @@ protected:
     /** @brief Protected capacity setter */
     void setCapacity(const Range capacity) noexcept { _capacity = capacity; }
 
-    /** @brief Unsafe data */
-    [[nodiscard]] Type *dataUnsafe(void) noexcept { return _data; }
-    [[nodiscard]] const Type *dataUnsafe(void) const noexcept { return _data; }
-
-    /** @brief Unsafe begin / end overloads */
-    [[nodiscard]] Iterator beginUnsafe(void) noexcept { return data(); }
-    [[nodiscard]] Iterator endUnsafe(void) noexcept { return data() + sizeUnsafe(); }
-    [[nodiscard]] ConstIterator beginUnsafe(void) const noexcept { return data(); }
-    [[nodiscard]] ConstIterator endUnsafe(void) const noexcept { return data() + sizeUnsafe(); }
-
 
     /** @brief Allocates a new buffer */
     [[nodiscard]] Type *allocate(const Range capacity) noexcept;
 
     /** @brief Deallocates a buffer */
-    void deallocate(Type *data) noexcept;
+    void deallocate(Type * const data, const Range capacity) noexcept;
 
+    /** @brief Get a pointer to the data cache */
+    [[nodiscard]] Type *optimizedData(void) noexcept
+        { return reinterpret_cast<Type *>(&_optimizedData); }
+    [[nodiscard]] const Type *optimizedData(void) const noexcept
+        { return reinterpret_cast<const Type *>(&_optimizedData); }
 
 private:
     alignas(alignof(Type)) std::byte _optimizedData[sizeof(Type) * OptimizedCapacity];
-    Type *_data { nullptr };
     Range _size {};
     Range _capacity {};
-
-    [[nodiscard]] Type *optimizedData(void) noexcept
-        { return reinterpret_cast<Type *>(&_optimizedData); }
-
-    [[nodiscard]] const Type *optimizedData(void) const noexcept
-        { return reinterpret_cast<const Type *>(&_optimizedData); }
+    Type *_data { nullptr };
 };
 
 #include "SmallVectorBase.ipp"

@@ -9,7 +9,7 @@ inline void Core::Internal::SmallVectorBase<Type, OptimizedCapacity, Range>::ste
 {
     if (_data) {
         std::destroy(beginUnsafe(), endUnsafe());
-        deallocate(_data);
+        deallocate(_data, _capacity);
     }
     if (other.isCacheUsed()) {
         std::uninitialized_move(other.beginUnsafe(), other.endUnsafe(), optimizedData());
@@ -63,15 +63,15 @@ inline void Core::Internal::SmallVectorBase<Type, OptimizedCapacity, Range>::swa
 template<typename Type, std::size_t OptimizedCapacity, typename Range>
 inline Type *Core::Internal::SmallVectorBase<Type, OptimizedCapacity, Range>::allocate(const Range capacity) noexcept
 {
-    if (capacity <= OptimizedCapacity)
+    if (capacity <= OptimizedCapacity) [[likely]]
         return optimizedData();
     else
         return reinterpret_cast<Type *>(Utils::AlignedAlloc<alignof(Type)>(sizeof(Type) * capacity));
 }
 
 template<typename Type, std::size_t OptimizedCapacity, typename Range>
-inline void Core::Internal::SmallVectorBase<Type, OptimizedCapacity, Range>::deallocate(Type *data) noexcept
+inline void Core::Internal::SmallVectorBase<Type, OptimizedCapacity, Range>::deallocate(Type * const data, const Range) noexcept
 {
-    if (data != optimizedData())
+    if (data != optimizedData()) [[unlikely]]
         Utils::AlignedFree(data);
 }

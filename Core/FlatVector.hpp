@@ -10,6 +10,16 @@
 
 namespace Core
 {
-    template<typename Type, typename Range = std::size_t>
-    using FlatVector = Internal::VectorDetails<Internal::FlatVectorBase<Type, Range>, Type, Range>;
+    /**
+     * @brief 8 bytes vector that allocates its size and capacity on the heap
+     *
+     * @tparam Type Internal type in container
+     * @tparam Range Range of container
+     */
+    template<typename Type, typename Range = std::size_t, typename CustomHeaderType = void>
+    using FlatVector = Internal::VectorDetails<Internal::FlatVectorBase<Type, Range, CustomHeaderType>, Type, Range>;
+
+    /** @brief 8 bytes vector using signed char with a reduced range */
+    template<typename Type, typename CustomHeaderType = void>
+    using TinyFlatVector = Internal::VectorDetails<Internal::FlatVectorBase<Type, std::uint32_t, CustomHeaderType>, Type, std::uint32_t>;
 }

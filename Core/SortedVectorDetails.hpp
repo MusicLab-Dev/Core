@@ -73,7 +73,7 @@ public:
 
     /** @brief Push an element into the vector */
     template<typename ...Args>
-    Type &push(Args &&...args);
+    std::enable_if_t<std::is_constructible_v<Type, Args...>, Type &> push(Args &&...args);
 
 
     /** @brief Insert a range of default initialized values */
@@ -97,8 +97,7 @@ public:
 
     /** @brief Insert a range of element by iterating over iterators */
     template<typename InputIterator>
-    std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<InputIterator>())>, void>
-        insert(InputIterator from, InputIterator to);
+    void insert(InputIterator from, InputIterator to);
 
     /** @brief Insert a range of element by using a map function over iterators */
     template<typename InputIterator, typename Map>
@@ -117,21 +116,21 @@ public:
 
     /** @brief Resize the vector with input iterators */
     template<typename InputIterator>
-    std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<InputIterator>())>, void>
-        resize(InputIterator from, InputIterator to);
+    void resize(InputIterator from, InputIterator to);
 
     /** @brief Resize the vector using a map function with input iterators */
     template<typename InputIterator, typename Map>
     void resize(InputIterator from, InputIterator to, Map &&map);
-
-    /** @brief Sort the vector */
-    void sort(void);
 
 private:
     /** @brief Reimplemented functions */
     using DetailsBase::push;
     using DetailsBase::insert;
     using DetailsBase::resize;
+
+protected:
+    /** @brief Sort the vector */
+    void sort(void);
 
     /** @brief Finds where to insert an element */
     [[nodiscard]] Iterator findSortedPlacement(const Type &value)

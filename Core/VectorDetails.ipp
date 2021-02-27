@@ -5,12 +5,12 @@
 
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 template<typename ...Args>
-inline Type &Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::push(Args &&...args)
+inline std::enable_if_t<std::is_constructible_v<Type, Args...>, Type &> Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::push(Args &&...args)
     noexcept(nothrow_constructible(Type, Args...) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
-    if (!data())
+    if (!data()) [[unlikely]]
         reserveUnsafe<false>(2);
-    else if (sizeUnsafe() == capacityUnsafe())
+    else if (sizeUnsafe() == capacityUnsafe()) [[unlikely]]
         grow();
     const auto currentSize = sizeUnsafe();
     Type * const elem = dataUnsafe() + currentSize;
@@ -33,9 +33,9 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
     Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::insertDefault(Iterator pos, const Range count)
     noexcept(nothrow_default_constructible(Type) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
-    if (!count)
+    if (!count) [[unlikely]]
         return end();
-    else if (pos == nullptr) {
+    else if (pos == nullptr) [[unlikely]] {
         resize(count);
         return beginUnsafe();
     }
@@ -44,7 +44,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
     Range position = pos - currentBegin;
-    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity) {
+    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity) [[unlikely]] {
         const auto desiredCapacity = currentCapacity + std::max(currentCapacity, count);
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
@@ -64,7 +64,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         std::uninitialized_move_n(currentBegin, position, tmpData);
         std::uninitialized_move(currentBegin + position, currentEnd, tmpData + position + count);
         std::uninitialized_default_construct_n(tmpData + position, count);
-        deallocate(currentData);
+        deallocate(currentData, currentCapacity);
         return tmpData + position;
     } else if (const auto after = currentSize - position; after > count) {
         std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
@@ -82,9 +82,9 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         Iterator pos, const Range count, const Type &value)
     noexcept(nothrow_copy_constructible(Type) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
-    if (!count)
+    if (!count) [[unlikely]]
         return end();
-    else if (pos == nullptr) {
+    else if (pos == nullptr) [[unlikely]] {
         resize(count, value);
         return beginUnsafe();
     }
@@ -93,7 +93,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
     Range position = pos - currentBegin;
-    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity) {
+    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity) [[unlikely]] {
         const auto desiredCapacity = currentCapacity + std::max(currentCapacity, count);
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
@@ -113,7 +113,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         std::uninitialized_move_n(currentBegin, position, tmpData);
         std::uninitialized_move(currentBegin + position, currentEnd, tmpData + position + count);
         std::fill_n(tmpData + position, count, value);
-        deallocate(currentData);
+        deallocate(currentData, currentCapacity);
         return tmpData + position;
     } else if (const auto after = currentSize - position; after > count) {
         std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
@@ -127,7 +127,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
 
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 template<typename InputIterator>
-inline std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<InputIterator>())>, typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::Iterator>
+inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::Iterator
     Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::insert(
         Iterator pos, InputIterator from, InputIterator to)
     noexcept(nothrow_forward_iterator_constructible(InputIterator) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
@@ -135,18 +135,18 @@ inline std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<Inp
     const Range count = std::distance(from, to);
     Range position;
 
-    if (!count)
+    if (!count) [[unlikely]]
         return end();
-    else if (pos == Iterator()) {
+    else if (pos == Iterator()) [[unlikely]] {
         reserve(count);
         position = 0;
-    } else
+    } else [[likely]]
         position = pos - beginUnsafe();
     const auto currentData = dataUnsafe();
     const auto currentSize = sizeUnsafe();
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
-    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity) {
+    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity) [[unlikely]] {
         const auto desiredCapacity = currentCapacity + std::max(currentCapacity, count);
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
@@ -166,7 +166,7 @@ inline std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<Inp
         std::uninitialized_move_n(currentBegin, position, tmpData);
         std::uninitialized_move(currentBegin + position, currentEnd, tmpData + position + count);
         std::copy(from, to, tmpData + position);
-        deallocate(currentData);
+        deallocate(currentData, currentCapacity);
         return tmpData + position;
     } else if (const auto after = currentSize - position; after > count) {
         std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
@@ -198,18 +198,18 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
     const Range count = std::distance(from, to);
     Range position;
 
-    if (!count)
+    if (!count) [[unlikely]]
         return end();
-    else if (pos == Iterator()) {
+    else if (pos == Iterator()) [[unlikely]] {
         reserve(count);
         position = 0;
-    } else
+    } else [[likely]]
         position = pos - beginUnsafe();
     const auto currentData = dataUnsafe();
     const auto currentSize = sizeUnsafe();
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
-    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity) {
+    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity) [[unlikely]] {
         const auto desiredCapacity = currentCapacity + std::max(currentCapacity, count);
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
@@ -229,7 +229,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         std::uninitialized_move_n(currentBegin, position, tmpData);
         std::uninitialized_move(currentBegin + position, currentEnd, tmpData + position + count);
         MapCopy(from, to, std::forward<Map>(map), tmpData + position);
-        deallocate(currentData);
+        deallocate(currentData, currentCapacity);
         return tmpData + position;
     } else if (const auto after = currentSize - position; after > count) {
         std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
@@ -245,7 +245,7 @@ template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::erase(Iterator from, Iterator to)
     noexcept(nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
-    if (from == to)
+    if (from == to) [[unlikely]]
         return;
     const auto end = endUnsafe();
     setSize(sizeUnsafe() - std::distance(from, to));
@@ -257,14 +257,14 @@ template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::resize(const Range count)
     noexcept(nothrow_default_constructible(Type) && nothrow_destructible(Type))
 {
-    if (!count) {
+    if (!count) [[unlikely]] {
         clear();
         return;
-    } else if (!data())
+    } else if (!data()) [[likely]]
         reserveUnsafe<false>(count);
     else if (capacityUnsafe() < count)
         reserveUnsafe<true>(count);
-    else
+    else [[unlikely]]
         clearUnsafe();
     setSize(count);
     std::uninitialized_value_construct_n(dataUnsafe(), count);
@@ -274,14 +274,14 @@ template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::resize(const Range count, const Type &value)
     noexcept(nothrow_copy_constructible(Type) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
-    if (!count) {
+    if (!count) [[unlikely]] {
         clear();
         return;
-    } else if (!data())
+    } else if (!data()) [[likely]]
         reserveUnsafe<false>(count);
     else if (capacityUnsafe() < count)
         reserveUnsafe<true>(count);
-    else
+    else [[unlikely]]
         clearUnsafe();
     setSize(count);
     std::uninitialized_fill_n(dataUnsafe(), count, value);
@@ -290,19 +290,19 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 template<typename InputIterator>
 inline std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<InputIterator>())>, void>
-    Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::resize(InputIterator from, InputIterator to)
+        Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::resize(InputIterator from, InputIterator to)
     noexcept(nothrow_forward_iterator_constructible(InputIterator) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
     const Range count = std::distance(from, to);
 
-    if (!count) {
+    if (!count) [[unlikely]] {
         clear();
         return;
-    } else if (!data())
+    } else if (!data()) [[likely]]
         reserveUnsafe<false>(count);
     else if (capacityUnsafe() < count)
         reserveUnsafe<true>(count);
-    else
+    else [[unlikely]]
         clearUnsafe();
     setSize(count);
     std::uninitialized_copy(from, to, beginUnsafe());
@@ -314,14 +314,14 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
 {
     const Range count = std::distance(from, to);
 
-    if (!count) {
+    if (!count) [[unlikely]] {
         clear();
         return;
-    } else if (!data())
+    } else if (!data()) [[likely]]
         reserveUnsafe<false>(count);
     else if (capacityUnsafe() < count)
         reserveUnsafe<true>(count);
-    else
+    else [[unlikely]]
         clearUnsafe();
     setSize(count);
     auto begin = beginUnsafe();
@@ -338,7 +338,7 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::clear(void) noexcept_destructible(Type)
 {
-    if (data())
+    if (data()) [[likely]]
         clearUnsafe();
 }
 
@@ -352,7 +352,7 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::release(void) noexcept_destructible(Type)
 {
-    if (data())
+    if (data()) [[likely]]
         releaseUnsafe();
 }
 
@@ -360,11 +360,12 @@ template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::releaseUnsafe(void) noexcept_destructible(Type)
 {
     const auto currentData = dataUnsafe();
+    const auto currentCapacity = capacityUnsafe();
 
     clearUnsafe();
     setCapacity(0);
     setData(nullptr);
-    deallocate(currentData);
+    deallocate(currentData, currentCapacity);
 }
 
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
@@ -383,7 +384,8 @@ inline bool Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
     noexcept(nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
     if constexpr (IsSafe) {
-        if (capacityUnsafe() >= capacity)
+        const auto currentCapacity = capacityUnsafe();
+        if (currentCapacity >= capacity) [[unlikely]]
             return false;
         const auto currentSize = sizeUnsafe();
         const auto currentData = dataUnsafe();
@@ -397,7 +399,7 @@ inline bool Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
         }
         std::uninitialized_move_n(currentData, currentSize, tmpData);
         std::destroy_n(currentData, currentSize);
-        deallocate(currentData);
+        deallocate(currentData, currentCapacity);
         return true;
     } else {
         if (capacity == 0)
@@ -428,7 +430,7 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
     }
     std::uninitialized_move_n(currentData, currentSize, tmpData);
     std::destroy_n(currentData, currentSize);
-    deallocate(currentData);
+    deallocate(currentData, currentCapacity);
 }
 
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
@@ -437,11 +439,11 @@ inline bool Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
     const auto count = size();
     const auto otherCount = other.size();
 
-    if (count == otherCount) {
-        if (count)
+    if (count == otherCount) [[unlikely]] {
+        if (count) [[likely]]
             return std::equal(beginUnsafe(), endUnsafe(), other.beginUnsafe());
-        else
+        else [[unlikely]]
             return true;
-    } else
+    } else [[likely]]
         return false;
 }

@@ -4,38 +4,57 @@ project(Core)
 get_filename_component(CoreDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
 set(CoreSources
+    ${CoreDir}/AllocatedFlatString.hpp
+    ${CoreDir}/AllocatedFlatVector.hpp
+    ${CoreDir}/AllocatedFlatVectorBase.hpp
+    ${CoreDir}/AllocatedSmallString.hpp
+    ${CoreDir}/AllocatedSmallVector.hpp
+    ${CoreDir}/AllocatedSmallVectorBase.hpp
+    ${CoreDir}/AllocatedString.hpp
+    ${CoreDir}/AllocatedVector.hpp
+    ${CoreDir}/AllocatedVectorBase.hpp
     ${CoreDir}/Assert.hpp
-    ${CoreDir}/Utils.hpp
-    ${CoreDir}/Utils.ipp
-    ${CoreDir}/HeapArray.hpp
-    ${CoreDir}/HeapArray.ipp
-    ${CoreDir}/VectorDetails.hpp
-    ${CoreDir}/VectorDetails.ipp
-    ${CoreDir}/SortedVectorDetails.hpp
-    ${CoreDir}/SortedVectorDetails.ipp
-    ${CoreDir}/VectorBase.hpp
-    ${CoreDir}/VectorBase.ipp
-    ${CoreDir}/Vector.hpp
-    ${CoreDir}/SortedVector.hpp
+    ${CoreDir}/Core.cmake
+    ${CoreDir}/Core.cpp
+    ${CoreDir}/Dispatcher.hpp
+    ${CoreDir}/DispatcherDetails.hpp
+    ${CoreDir}/FlatString.hpp
+    ${CoreDir}/FlatVector.hpp
     ${CoreDir}/FlatVectorBase.hpp
     ${CoreDir}/FlatVectorBase.ipp
-    ${CoreDir}/FlatVector.hpp
-    ${CoreDir}/SortedFlatVector.hpp
-    ${CoreDir}/SmallVectorBase.hpp
-    ${CoreDir}/SmallVectorBase.ipp
-    ${CoreDir}/SmallVector.hpp
-    ${CoreDir}/SortedSmallVector.hpp
-    ${CoreDir}/FlatString.hpp
-    ${CoreDir}/Core.cpp
     ${CoreDir}/Functor.hpp
-    ${CoreDir}/TrivialFunctor.hpp
-    ${CoreDir}/DispatcherDetails.hpp
-    ${CoreDir}/Dispatcher.hpp
-    ${CoreDir}/TrivialDispatcher.hpp
-    ${CoreDir}/SPSCQueue.hpp
-    ${CoreDir}/SPSCQueue.ipp
+    ${CoreDir}/Hash.hpp
+    ${CoreDir}/HeapArray.hpp
+    ${CoreDir}/HeapArray.ipp
     ${CoreDir}/MPMCQueue.hpp
     ${CoreDir}/MPMCQueue.ipp
+    ${CoreDir}/SmallString.hpp
+    ${CoreDir}/SmallVector.hpp
+    ${CoreDir}/SmallVectorBase.hpp
+    ${CoreDir}/SmallVectorBase.ipp
+    ${CoreDir}/SortedAllocatedFlatVector.hpp
+    ${CoreDir}/SortedAllocatedSmallVector.hpp
+    ${CoreDir}/SortedAllocatedVector.hpp
+    ${CoreDir}/SortedFlatVector.hpp
+    ${CoreDir}/SortedSmallVector.hpp
+    ${CoreDir}/SortedVector.hpp
+    ${CoreDir}/SortedVectorDetails.hpp
+    ${CoreDir}/SortedVectorDetails.ipp
+    ${CoreDir}/SPSCQueue.hpp
+    ${CoreDir}/SPSCQueue.ipp
+    ${CoreDir}/String.hpp
+    ${CoreDir}/StringDetails.hpp
+    ${CoreDir}/StringLiteral.hpp
+    ${CoreDir}/TrivialDispatcher.hpp
+    ${CoreDir}/TrivialFunctor.hpp
+    ${CoreDir}/UniqueAlloc.hpp
+    ${CoreDir}/Utils.hpp
+    ${CoreDir}/Utils.ipp
+    ${CoreDir}/Vector.hpp
+    ${CoreDir}/VectorBase.hpp
+    ${CoreDir}/VectorBase.ipp
+    ${CoreDir}/VectorDetails.hpp
+    ${CoreDir}/VectorDetails.ipp
 )
 
 add_library(${PROJECT_NAME} ${CoreSources})
