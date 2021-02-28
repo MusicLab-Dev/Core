@@ -116,11 +116,15 @@ public:
 
     /** @brief Resize the vector with input iterators */
     template<typename InputIterator>
-    void resize(InputIterator from, InputIterator to);
+    std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<InputIterator>())>, void>
+        resize(InputIterator from, InputIterator to);
 
     /** @brief Resize the vector using a map function with input iterators */
     template<typename InputIterator, typename Map>
     void resize(InputIterator from, InputIterator to, Map &&map);
+
+    /** @brief Sort the vector */
+    void sort(void);
 
 private:
     /** @brief Reimplemented functions */
@@ -129,9 +133,6 @@ private:
     using DetailsBase::resize;
 
 protected:
-    /** @brief Sort the vector */
-    void sort(void);
-
     /** @brief Finds where to insert an element */
     [[nodiscard]] Iterator findSortedPlacement(const Type &value)
         noexcept_invocable(Compare, const Type &, const Type &)

@@ -54,7 +54,8 @@ inline void Core::Internal::SortedVectorDetails<Base, Type, Range, Compare, IsSm
 
 template<typename Base, typename Type, typename Range, typename Compare, bool IsSmallOptimized>
 template<typename InputIterator>
-inline void Core::Internal::SortedVectorDetails<Base, Type, Range, Compare, IsSmallOptimized>::resize(
+inline std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<InputIterator>())>, void>
+    Core::Internal::SortedVectorDetails<Base, Type, Range, Compare, IsSmallOptimized>::resize(
         InputIterator from, InputIterator to)
 {
     if (from != to) [[likely]] {

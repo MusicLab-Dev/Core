@@ -229,10 +229,10 @@ public:
 
     /** @brief Find an element with functor */
     template<typename Functor>
-    [[nodiscard]] Iterator find(Functor &&functor) noexcept
+    [[nodiscard]] std::enable_if_t<std::is_invocable_v<Functor, Type &>, Iterator> find(Functor &&functor) noexcept
         { return std::find_if(begin(), end(), std::forward<Functor>(functor)); }
     template<typename Functor>
-    [[nodiscard]] ConstIterator find(Functor &&functor) const noexcept
+    [[nodiscard]] std::enable_if_t<std::is_invocable_v<Functor, const Type &>, ConstIterator> find(Functor &&functor) const noexcept
         { return std::find_if(begin(), end(), std::forward<Functor>(functor)); }
 
 
