@@ -48,6 +48,7 @@ set(CoreSources
     ${CoreDir}/TrivialDispatcher.hpp
     ${CoreDir}/TrivialFunctor.hpp
     ${CoreDir}/UniqueAlloc.hpp
+    ${CoreDir}/MacroUtils.hpp
     ${CoreDir}/Utils.hpp
     ${CoreDir}/Utils.ipp
     ${CoreDir}/Vector.hpp
