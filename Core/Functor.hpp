@@ -109,7 +109,10 @@ public:
     {
         destroy();
         _invoke = [](Cache &cache, Args ...args) -> Return {
-            return CacheAs<ClassFunctor>(cache)(std::forward<Args>(args)...);
+            if constexpr (std::is_same_v<Return, void>)
+                CacheAs<ClassFunctor>(cache)(std::forward<Args>(args)...);
+            else
+                return CacheAs<ClassFunctor>(cache)(std::forward<Args>(args)...);
         };
         _destruct = nullptr;
         new (&_cache) ClassFunctor(std::forward<ClassFunctor>(functor));
@@ -143,7 +146,10 @@ public:
     {
         destroy();
         _invoke = [](Cache &cache, Args ...args) {
-            return (CacheAs<ClassType *>(cache)->*MemberFunction)(std::forward<Args>(args)...);
+            if constexpr (std::is_same_v<Return, void>)
+                (CacheAs<ClassType *>(cache)->*MemberFunction)(std::forward<Args>(args)...);
+            else
+                return (CacheAs<ClassType *>(cache)->*MemberFunction)(std::forward<Args>(args)...);
         };
         _destruct = nullptr;
         new (&_cache) ClassType *(instance);
@@ -156,7 +162,10 @@ public:
     {
         destroy();
         _invoke = [](Cache &cache, Args ...args) {
-            return (CacheAs<const ClassType *>(cache)->*MemberFunction)(std::forward<Args>(args)...);
+            if constexpr (std::is_same_v<Return, void>)
+                (CacheAs<const ClassType *>(cache)->*MemberFunction)(std::forward<Args>(args)...);
+            else
+                return (CacheAs<const ClassType *>(cache)->*MemberFunction)(std::forward<Args>(args)...);
         };
         _destruct = nullptr;
         new (&_cache) const ClassType *(instance);
@@ -169,7 +178,10 @@ public:
     {
         destroy();
         _invoke = [](Cache &, Args ...args) -> Return {
-            return (*Function)(std::forward<Args>(args)...);
+            if constexpr (std::is_same_v<Return, void>)
+                return (*Function)(std::forward<Args>(args)...);
+            else
+                return (*Function)(std::forward<Args>(args)...);
         };
         _destruct = nullptr;
     }
