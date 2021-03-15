@@ -379,6 +379,25 @@ inline bool Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
 }
 
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
+inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::move(Range from, Range to, Range output) noexcept_ndebug
+{
+    const auto count = to - from;
+
+    coreAssert(output < from || output > to,
+        throw std::logic_error("VectorDetails::move: Invalid move range"));
+    ++to;
+    if (output < from) {
+        const auto tmp = from;
+        from = output;
+        output = to;
+        to = tmp;
+    } else if (output)
+        ++output;
+    const auto it = beginUnsafe();
+    std::rotate(it + from, it + to, it + output);
+}
+
+template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 template<bool IsSafe>
 inline bool Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::reserveUnsafe(const Range capacity)
     noexcept(nothrow_forward_constructible(Type) && nothrow_destructible(Type))

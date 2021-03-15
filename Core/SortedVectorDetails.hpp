@@ -126,13 +126,11 @@ public:
     /** @brief Sort the vector */
     void sort(void);
 
-private:
-    /** @brief Reimplemented functions */
-    using DetailsBase::push;
-    using DetailsBase::insert;
-    using DetailsBase::resize;
+    /** @brief Assign a new value to an existing element
+     *  @return The index where the element has been moved if assignment break sort */
+    template<typename AssignType>
+    Range assign(const Range index, AssignType &&value);
 
-protected:
     /** @brief Finds where to insert an element */
     [[nodiscard]] Iterator findSortedPlacement(const Type &value)
         noexcept_invocable(Compare, const Type &, const Type &)
@@ -140,6 +138,12 @@ protected:
     [[nodiscard]] ConstIterator findSortedPlacement(const Type &value) const
         noexcept_invocable(Compare, const Type &, const Type &)
         { return DetailsBase::find([&value](const Type &other) { return Compare{}(value, other); }); }
+
+private:
+    /** @brief Reimplemented functions */
+    using DetailsBase::push;
+    using DetailsBase::insert;
+    using DetailsBase::resize;
 };
 
 #include "SortedVectorDetails.ipp"

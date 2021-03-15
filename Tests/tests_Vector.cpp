@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <string>
+#include <iostream>
 
 #include <Core/Vector.hpp>
 #include <Core/FlatVector.hpp>
@@ -149,6 +150,29 @@ TEST(Vector, Reserve) \
     vector.reserve(count - 1); \
     ASSERT_EQ(vector.size(), count); \
     ASSERT_EQ(vector.capacity(), count); \
+} \
+ \
+TEST(Vector, Move) \
+{ \
+    constexpr auto count = 4ul; \
+    Vector<std::size_t PassVargs(__VA_ARGS__)> vector; \
+    const Vector<std::size_t PassVargs(__VA_ARGS__)> Original { 0, 1, 2, 3, 4 }; \
+    const Vector<std::size_t PassVargs(__VA_ARGS__)> Answer1 { 3, 0, 1, 2, 4  }; \
+    const Vector<std::size_t PassVargs(__VA_ARGS__)> Answer2 { 3, 4, 0, 1, 2 }; \
+    const Vector<std::size_t PassVargs(__VA_ARGS__)> Answer3 { 1, 2, 3, 4, 0 }; \
+    const Vector<std::size_t PassVargs(__VA_ARGS__)> Answer4 { 2, 3, 4, 0, 1 }; \
+    vector = Original; \
+    vector.move(3, 3, 0); \
+    ASSERT_EQ(vector, Answer1); \
+    vector = Original; \
+    vector.move(3, 4, 0); \
+    ASSERT_EQ(vector, Answer2); \
+    vector = Original; \
+    vector.move(0, 0, 4); \
+    ASSERT_EQ(vector, Answer3); \
+    vector = Original; \
+    vector.move(0, 1, 4); \
+    ASSERT_EQ(vector, Answer4); \
 } \
  \
 TEST(Vector, InsertIterators) \
