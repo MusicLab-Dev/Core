@@ -123,13 +123,16 @@ public:
     template<typename InputIterator, typename Map>
     void resize(InputIterator from, InputIterator to, Map &&map);
 
+
     /** @brief Sort the vector */
     void sort(void);
+
 
     /** @brief Assign a new value to an existing element
      *  @return The index where the element has been moved if assignment break sort */
     template<typename AssignType>
     Range assign(const Range index, AssignType &&value);
+
 
     /** @brief Finds where to insert an element */
     [[nodiscard]] Iterator findSortedPlacement(const Type &value)

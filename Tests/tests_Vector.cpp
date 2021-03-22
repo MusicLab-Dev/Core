@@ -6,7 +6,6 @@
 #include <gtest/gtest.h>
 
 #include <string>
-#include <iostream>
 
 #include <Core/Vector.hpp>
 #include <Core/FlatVector.hpp>
@@ -154,7 +153,6 @@ TEST(Vector, Reserve) \
  \
 TEST(Vector, Move) \
 { \
-    constexpr auto count = 4ul; \
     Vector<std::size_t PassVargs(__VA_ARGS__)> vector; \
     const Vector<std::size_t PassVargs(__VA_ARGS__)> Original { 0, 1, 2, 3, 4 }; \
     const Vector<std::size_t PassVargs(__VA_ARGS__)> Answer1 { 3, 0, 1, 2, 4  }; \
