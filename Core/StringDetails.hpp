@@ -27,12 +27,14 @@ public:
     using Base::dataUnsafe;
     using Base::size;
     using Base::sizeUnsafe;
+    using Base::capacity;
+    using Base::capacityUnsafe;
     using Base::begin;
     using Base::end;
     using Base::resize;
     using Base::insert;
     using Base::isSafe;
-    using Base::operator bool;
+    using Base::grow;
 
     /** @brief Base::Default constructor */
     StringDetails(void) noexcept = default;
@@ -44,16 +46,16 @@ public:
     StringDetails(StringDetails &&other) noexcept = default;
 
     /** @brief CString constructor */
-    explicit StringDetails(const char * const cstring) noexcept { resize(cstring, cstring + SafeStrlen(cstring)); }
+    StringDetails(const char * const cstring) noexcept { resize(cstring, cstring + SafeStrlen(cstring)); }
 
     /** @brief CString length constructor */
-    explicit StringDetails(const char * const cstring, const std::size_t length) noexcept { resize(cstring, cstring + length); }
+    StringDetails(const char * const cstring, const std::size_t length) noexcept { resize(cstring, cstring + length); }
 
     /** @brief std::string constructor */
-    explicit StringDetails(const std::basic_string<Type> &other) noexcept { resize(other.begin(), other.end()); }
+    StringDetails(const std::basic_string<Type> &other) noexcept { resize(other.begin(), other.end()); }
 
     /** @brief std::string_view constructor */
-    explicit StringDetails(const std::basic_string_view<Type> &other) noexcept { resize(other.begin(), other.end()); }
+    StringDetails(const std::basic_string_view<Type> &other) noexcept { resize(other.begin(), other.end()); }
 
     /** @brief Destructor */
     ~StringDetails(void) noexcept = default;
@@ -95,7 +97,19 @@ public:
     /** @brief Get a std::string_view of the object */
     [[nodiscard]] std::basic_string<Type> toStdString(void) const noexcept { return isSafe() ? std::basic_string<Type>(data(), sizeUnsafe()) : std::basic_string<Type>(); }
 
+    [[nodiscard]] const char *c_str(void) const noexcept
+    {
+        if (!size()) [[unlikely]]
+            return nullptr;
+        else if (size() == capacity()) [[unlikely]]
+            const_cast<StringDetails *>(this)->grow(1);
+        *const_cast<StringDetails *>(this)->end() = '\0';
+        return dataUnsafe();
+    }
+
+    using Base::operator bool;
 private:
+
     /** @brief Strlen but with null cstring check */
     [[nodiscard]] static std::size_t SafeStrlen(const char * const cstring) noexcept
     {
