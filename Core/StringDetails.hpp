@@ -34,7 +34,9 @@ public:
     using Base::resize;
     using Base::insert;
     using Base::isSafe;
+    using Base::reserve;
     using Base::grow;
+    using Base::operator bool;
 
     /** @brief Base::Default constructor */
     StringDetails(void) noexcept = default;
@@ -78,18 +80,27 @@ public:
     /** @brief Comparison operator */
     [[nodiscard]] bool operator==(const StringDetails &other) const noexcept { return std::equal(begin(), end(), other.begin(), other.end()); }
     [[nodiscard]] bool operator!=(const StringDetails &other) const noexcept { return !operator==(other); }
-
-    /** @brief cstring comparison operator */
     [[nodiscard]] bool operator==(const char * const cstring) const noexcept { return std::equal(begin(), end(), cstring, cstring + SafeStrlen(cstring)); }
     [[nodiscard]] bool operator!=(const char * const cstring) const noexcept { return !operator==(cstring); }
-
-    /** @brief std::string comparison operator */
     [[nodiscard]] bool operator==(const std::basic_string<Type> &other) const noexcept { return std::equal(begin(), end(), other.begin(), other.end()); }
     [[nodiscard]] bool operator!=(const std::basic_string<Type> &other) const noexcept { return !operator==(other); }
-
-    /** @brief std::string_view comparison operator */
     [[nodiscard]] bool operator==(const std::basic_string_view<Type> &other) const noexcept { return std::equal(begin(), end(), other.begin(), other.end()); }
     [[nodiscard]] bool operator!=(const std::basic_string_view<Type> &other) const noexcept { return !operator==(other); }
+
+
+    /** @brief Append operator */
+    StringDetails &operator+=(const StringDetails &other) noexcept { insert(end(), other.begin(), other.end()); return *this; }
+    StringDetails &operator+=(const char * const cstring) noexcept { insert(end(), cstring, cstring + SafeStrlen(cstring)); return *this; }
+    StringDetails &operator+=(const std::basic_string<Type> &other) noexcept { insert(end(), other.begin(), other.end()); return *this; }
+    StringDetails &operator+=(const std::basic_string_view<Type> &other) noexcept { insert(end(), other.begin(), other.end()); return *this; }
+
+
+    /** @brief Addition operator */
+    [[nodiscard]] StringDetails operator+(const StringDetails &other) noexcept;
+    [[nodiscard]] StringDetails operator+(const char * const cstring) noexcept;
+    [[nodiscard]] StringDetails operator+(const std::basic_string<Type> &other) noexcept;
+    [[nodiscard]] StringDetails operator+(const std::basic_string_view<Type> &other) noexcept;
+
 
     /** @brief Get a std::string from the object */
     [[nodiscard]] std::basic_string_view<Type> toStdView(void) const noexcept { return isSafe() ? std::basic_string_view<Type>(data(), sizeUnsafe()) : std::basic_string_view<Type>(); }
@@ -97,25 +108,13 @@ public:
     /** @brief Get a std::string_view of the object */
     [[nodiscard]] std::basic_string<Type> toStdString(void) const noexcept { return isSafe() ? std::basic_string<Type>(data(), sizeUnsafe()) : std::basic_string<Type>(); }
 
-    [[nodiscard]] const char *c_str(void) const noexcept
-    {
-        if (!size()) [[unlikely]]
-            return nullptr;
-        else if (size() == capacity()) [[unlikely]]
-            const_cast<StringDetails *>(this)->grow(1);
-        *const_cast<StringDetails *>(this)->end() = '\0';
-        return dataUnsafe();
-    }
+    /** @brief Get a null terminated char array pointer
+     *  ! Be careful as the function is constant for convinience but it can still modify the internal pointer ! */
+    [[nodiscard]] const char *c_str(void) const noexcept;
 
-    using Base::operator bool;
 private:
-
     /** @brief Strlen but with null cstring check */
-    [[nodiscard]] static std::size_t SafeStrlen(const char * const cstring) noexcept
-    {
-        if (!cstring) [[unlikely]]
-            return 0;
-        else [[likely]]
-            return std::strlen(cstring);
-    }
+    [[nodiscard]] static std::size_t SafeStrlen(const char * const cstring) noexcept;
 };
+
+#include "StringDetails.ipp"
