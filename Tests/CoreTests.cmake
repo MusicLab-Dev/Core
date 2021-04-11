@@ -12,6 +12,7 @@ set(CoreTestsSources
     ${CoreTestsDir}/tests_UniqueAlloc.cpp
     ${CoreTestsDir}/tests_Functor.cpp
     ${CoreTestsDir}/tests_TrivialFunctor.cpp
+    ${CoreTestsDir}/tests_String.cpp
     ${CoreTestsDir}/tests_Dispatcher.cpp
     ${CoreTestsDir}/tests_SPSCQueue.cpp
     ${CoreTestsDir}/tests_MPMCQueue.cpp
