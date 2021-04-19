@@ -327,9 +327,9 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
     auto begin = beginUnsafe();
     while (from != to) {
         if constexpr (Utils::IsMoveIterator<InputIterator>::Value)
-            new (begin) Type(std::invoke(map, std::move(*from)));
+            new (begin) Type(map(std::move(*from)));
         else
-            new (begin) Type(std::invoke(map, *from));
+            new (begin) Type(map(*from));
         ++from;
         ++begin;
     }
