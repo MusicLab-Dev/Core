@@ -63,7 +63,7 @@ inline void Core::Internal::SmallVectorBase<Type, OptimizedCapacity, Range>::swa
 template<typename Type, std::size_t OptimizedCapacity, typename Range>
 inline Type *Core::Internal::SmallVectorBase<Type, OptimizedCapacity, Range>::allocate(const Range capacity) noexcept
 {
-    if (capacity <= OptimizedCapacity) [[likely]]
+    if (capacity <= OptimizedCapacity)
         return optimizedData();
     else
         return reinterpret_cast<Type *>(Utils::AlignedAlloc<alignof(Type)>(sizeof(Type) * capacity));
@@ -72,6 +72,6 @@ inline Type *Core::Internal::SmallVectorBase<Type, OptimizedCapacity, Range>::al
 template<typename Type, std::size_t OptimizedCapacity, typename Range>
 inline void Core::Internal::SmallVectorBase<Type, OptimizedCapacity, Range>::deallocate(Type * const data, const Range) noexcept
 {
-    if (data != optimizedData()) [[unlikely]]
+    if (data != optimizedData())
         Utils::AlignedFree(data);
 }

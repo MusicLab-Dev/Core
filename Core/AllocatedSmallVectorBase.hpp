@@ -21,7 +21,7 @@ protected:
     /** @brief Allocates a new buffer */
     [[nodiscard]] Type *allocate(const Range capacity) noexcept
     {
-        if (capacity <= OptimizedCapacity) [[likely]]
+        if (capacity <= OptimizedCapacity)
             return SmallVectorBase<Type, OptimizedCapacity, Range>::optimizedData();
         else
             return reinterpret_cast<Type *>(AllocateFunc(sizeof(Type) * capacity, alignof(Type)));
@@ -30,7 +30,7 @@ protected:
     /** @brief Deallocates a buffer */
     void deallocate(Type * const data, const Range capacity) noexcept
     {
-        if (data != SmallVectorBase<Type, OptimizedCapacity, Range>::optimizedData()) [[unlikely]]
+        if (data != SmallVectorBase<Type, OptimizedCapacity, Range>::optimizedData())
             DeallocateFunc(data, capacity, alignof(Type));
     }
 };
