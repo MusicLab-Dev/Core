@@ -28,8 +28,8 @@ namespace Core::Internal
     }
 
     /** @brief Header of the FlatVector with custom type */
-    template<typename Type, typename Range, typename CustomHeaderType>
-    struct alignas(GetFlatVectorHeaderAlignment<Type, Range, sizeof(CustomHeaderType)>()) FlatVectorHeader
+    template<typename Type, typename Range, typename CustomHeaderType, std::size_t CustomHeaderTypeSize = sizeof(CustomHeaderType)>
+    struct alignas(GetFlatVectorHeaderAlignment<Type, Range, CustomHeaderTypeSize>()) FlatVectorHeader
     {
         CustomHeaderType customType {};
         Range size {};

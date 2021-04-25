@@ -11,11 +11,7 @@
 #include <Core/SortedFlatVector.hpp>
 #include <Core/SortedSmallVector.hpp>
 
-#ifdef _WIN32
-# define PassVargs(...) , __VA_ARGS__
-#else
-# define PassVargs(...) __VA_OPT__(,) __VA_ARGS__
-#endif
+#define PassVargs(...) __VA_OPT__(,) __VA_ARGS__
 
 #define GENERATE_VECTOR_TESTS(Vector, ...) \
 TEST(Vector, Basics) \
