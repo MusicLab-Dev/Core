@@ -82,7 +82,11 @@ public:
         : VectorDetails(init.begin(), init.end()) {}
 
     /** @brief Release the vector */
+#ifdef WIN32 // On WIN32 we cannot use a non declared type as noexcept dependency of a destructor
+    ~VectorDetails(void) { release(); }
+#else
     ~VectorDetails(void) noexcept_destructible(Type) { release(); }
+#endif
 
     /** @brief Copy assignment */
     VectorDetails &operator=(const VectorDetails &other) noexcept_copy_constructible(Type)
