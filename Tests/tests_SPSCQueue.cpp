@@ -33,7 +33,7 @@ TEST(SPSCQueue, SinglePushPop)
 TEST(SPSCQueue, RangePushPop)
 {
     constexpr auto test = [](auto &queue, const std::size_t size) {
-        const char ref = size % INT8_MAX;
+        const char ref = static_cast<char>(size % INT8_MAX);
         std::vector<char> tmp(size);
         for (auto &c : tmp)
             c = ref;

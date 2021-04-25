@@ -26,7 +26,7 @@ namespace Core
         /** @brief Ensure that a given member function is callable */
         template<auto Member, typename ClassType, typename Return, typename ...Args>
         constexpr bool TrivialFunctorMemberInvocable = std::is_invocable_r_v<Return, decltype(Member), ClassType &, Args...>;
-    };
+    }
 }
 
 /** @brief Very fast opaque functor but only takes trivial types less or equal sized than cacheline eighth */

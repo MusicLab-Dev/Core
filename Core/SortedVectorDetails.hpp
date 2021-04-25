@@ -30,6 +30,7 @@ public:
 
     /** @brief Copy constructor */
     SortedVectorDetails(const SortedVectorDetails &other) noexcept_copy_constructible(Type)
+        : DetailsBase()
         { DetailsBase::resize(other.begin(), other.end()); }
 
     /** @brief Move constructor */
