@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <initializer_list>
 #include <memory>
-#include <exception>
+#include <stdexcept>
 
 #include "Assert.hpp"
 #include "Utils.hpp"

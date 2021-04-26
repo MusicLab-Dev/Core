@@ -6,6 +6,7 @@
 #pragma once
 
 #include <memory>
+#include <stdexcept>
 
 #include "Assert.hpp"
 #include "Utils.hpp"
