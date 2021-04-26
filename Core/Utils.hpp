@@ -12,6 +12,9 @@
 #include <utility>
 #include <cstdlib>
 
+/** @brief Helper for unused variables */
+#define UNUSED(x) static_cast<void>(x)
+
 /** @brief Helper used to pass template into macro */
 #define TEMPLATE_TYPE(Class, ...) decltype(std::declval<Class<__VA_ARGS__>>())
 

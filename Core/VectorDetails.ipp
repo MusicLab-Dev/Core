@@ -132,7 +132,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         Iterator pos, InputIterator from, InputIterator to)
     noexcept(nothrow_forward_iterator_constructible(InputIterator) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
-    const Range count = std::distance(from, to);
+    const auto count = static_cast<Range>(std::distance(from, to));
     Range position;
 
     if (!count)
@@ -141,7 +141,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         reserve(count);
         position = 0;
     } else
-        position = pos - beginUnsafe();
+        position = static_cast<Range>(std::distance(beginUnsafe(), pos));
     const auto currentData = dataUnsafe();
     const auto currentSize = sizeUnsafe();
     auto currentBegin = beginUnsafe();
@@ -195,7 +195,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         }
     };
 
-    const Range count = std::distance(from, to);
+    const auto count = static_cast<Range>(std::distance(from, to));
     Range position;
 
     if (!count)
@@ -204,7 +204,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         reserve(count);
         position = 0;
     } else
-        position = pos - beginUnsafe();
+        position = static_cast<Range>(std::distance(beginUnsafe(), pos));
     const auto currentData = dataUnsafe();
     const auto currentSize = sizeUnsafe();
     auto currentBegin = beginUnsafe();
@@ -248,7 +248,7 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
     if (from == to)
         return;
     const auto end = endUnsafe();
-    setSize(sizeUnsafe() - std::distance(from, to));
+    setSize(sizeUnsafe() - static_cast<Range>(std::distance(from, to)));
     std::destroy(from, to);
     std::uninitialized_move(to, end, from);
 }
@@ -293,7 +293,7 @@ inline std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<Inp
         Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::resize(InputIterator from, InputIterator to)
     noexcept(nothrow_forward_iterator_constructible(InputIterator) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
-    const Range count = std::distance(from, to);
+    const auto count = static_cast<Range>(std::distance(from, to));
 
     if (!count)  {
         clear();
@@ -312,7 +312,7 @@ template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 template<typename InputIterator, typename Map>
 inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::resize(InputIterator from, InputIterator to, Map &&map)
 {
-    const Range count = std::distance(from, to);
+    const auto count = static_cast<Range>(std::distance(from, to));
 
     if (!count)  {
         clear();
