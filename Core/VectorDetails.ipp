@@ -418,8 +418,8 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
 {
     const auto currentData = dataUnsafe();
     const auto currentSize = sizeUnsafe();
-    const auto currentCapacity = capacityUnsafe();
-    const auto desiredCapacity = currentCapacity + std::max(currentCapacity, minimum);
+    const Range currentCapacity = capacityUnsafe();
+    const Range desiredCapacity = currentCapacity + std::max(currentCapacity, minimum);
     const auto tmpData = allocate(desiredCapacity);
 
     setData(tmpData);

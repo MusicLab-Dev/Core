@@ -19,12 +19,12 @@ namespace Core
     constexpr HashedName Hash(char const *str, std::size_t len) noexcept {
         HashedName h = HashOffset;
         for (std::size_t i = 0ul; i < len; ++i)
-            h = 31ul * h + str[i];
+            h = 31u * h + static_cast<HashedName>(str[i]);
         return h;
     }
 
     /** @brief Compile-time char hashing */
-    constexpr HashedName Hash(const char c) noexcept { return 31 * 4294967291L + c; }
+    constexpr HashedName Hash(const char c) noexcept { return 31u * HashOffset + static_cast<HashedName>(c); }
 
     /** @brief Compile-time string-view hashing */
     constexpr HashedName Hash(const std::string_view &str) { return Hash(str.data(), str.length()); }
