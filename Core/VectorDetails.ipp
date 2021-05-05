@@ -94,7 +94,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
     auto currentEnd = endUnsafe();
     Range position = pos - currentBegin;
     if (const Range currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
-        const Range desiredCapacity = currentCapacity + std::max(currentCapacity, count);
+        const Range desiredCapacity = currentCapacity + static_cast<Range>(std::max(currentCapacity, count));
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
         setSize(total);
@@ -147,7 +147,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
     if (const Range currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
-        const Range desiredCapacity = currentCapacity + std::max(currentCapacity, count);
+        const Range desiredCapacity = currentCapacity + static_cast<Range>(std::max(currentCapacity, count));
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
         setSize(total);
@@ -210,7 +210,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
     if (const Range currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
-        const Range desiredCapacity = currentCapacity + std::max(currentCapacity, count);
+        const Range desiredCapacity = currentCapacity + static_cast<Range>(std::max(currentCapacity, count));
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
         setSize(total);
