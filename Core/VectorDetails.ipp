@@ -12,9 +12,9 @@ inline std::enable_if_t<std::is_constructible_v<Type, Args...>, Type &> Core::In
         reserveUnsafe<false>(2);
     else if (sizeUnsafe() == capacityUnsafe())
         grow();
-    const auto currentSize = sizeUnsafe();
+    const Range currentSize = sizeUnsafe();
     Type * const elem = dataUnsafe() + currentSize;
-    setSize(currentSize + 1);
+    setSize(currentSize + static_cast<Range>(1));
     new (elem) Type(std::forward<Args>(args)...);
     return *elem;
 }
@@ -22,7 +22,7 @@ inline std::enable_if_t<std::is_constructible_v<Type, Args...>, Type &> Core::In
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::pop(void) noexcept_destructible(Type)
 {
-    const auto desiredSize = sizeUnsafe() - 1;
+    const Range desiredSize = sizeUnsafe() - static_cast<Range>(1);
 
     dataUnsafe()[desiredSize].~Type();
     setSize(desiredSize);
@@ -40,19 +40,19 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         return beginUnsafe();
     }
     const auto currentData = dataUnsafe();
-    const auto currentSize = sizeUnsafe();
+    const Range currentSize = sizeUnsafe();
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
     Range position = pos - currentBegin;
-    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
-        const auto desiredCapacity = currentCapacity + std::max(currentCapacity, count);
+    if (const Range currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
+        const Range desiredCapacity = currentCapacity + static_cast<Range>(std::max(currentCapacity, count));
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
         setSize(total);
         setCapacity(desiredCapacity);
         if constexpr (IsSmallOptimized) {
             if (tmpData == currentData) {
-                if (const auto after = currentSize - position; after > count) {
+                if (const Range after = currentSize - position; after > count) {
                     std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
                     std::move_backward(currentBegin + position, currentEnd - count, currentEnd);
                 } else
@@ -66,7 +66,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         std::uninitialized_default_construct_n(tmpData + position, count);
         deallocate(currentData, currentCapacity);
         return tmpData + position;
-    } else if (const auto after = currentSize - position; after > count) {
+    } else if (const Range after = currentSize - position; after > count) {
         std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
         std::move_backward(currentBegin + position, currentEnd - count, currentEnd);
     } else
@@ -89,19 +89,19 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         return beginUnsafe();
     }
     const auto currentData = dataUnsafe();
-    const auto currentSize = sizeUnsafe();
+    const Range currentSize = sizeUnsafe();
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
     Range position = pos - currentBegin;
-    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
-        const auto desiredCapacity = currentCapacity + std::max(currentCapacity, count);
+    if (const Range currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
+        const Range desiredCapacity = currentCapacity + std::max(currentCapacity, count);
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
         setSize(total);
         setCapacity(desiredCapacity);
         if constexpr (IsSmallOptimized) {
             if (tmpData == currentData) {
-                if (const auto after = currentSize - position; after > count) {
+                if (const Range after = currentSize - position; after > count) {
                     std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
                     std::move_backward(currentBegin + position, currentEnd - count, currentEnd);
                 } else
@@ -115,7 +115,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         std::fill_n(tmpData + position, count, value);
         deallocate(currentData, currentCapacity);
         return tmpData + position;
-    } else if (const auto after = currentSize - position; after > count) {
+    } else if (const Range after = currentSize - position; after > count) {
         std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
         std::move_backward(currentBegin + position, currentEnd - count, currentEnd);
     } else
@@ -143,18 +143,18 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
     } else
         position = static_cast<Range>(std::distance(beginUnsafe(), pos));
     const auto currentData = dataUnsafe();
-    const auto currentSize = sizeUnsafe();
+    const Range currentSize = sizeUnsafe();
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
-    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
-        const auto desiredCapacity = currentCapacity + std::max(currentCapacity, count);
+    if (const Range currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
+        const Range desiredCapacity = currentCapacity + std::max(currentCapacity, count);
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
         setSize(total);
         setCapacity(desiredCapacity);
         if constexpr (IsSmallOptimized) {
             if (tmpData == currentData) {
-                if (const auto after = currentSize - position; after > count) {
+                if (const Range after = currentSize - position; after > count) {
                     std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
                     std::move_backward(currentBegin + position, currentEnd - count, currentEnd);
                 } else
@@ -168,7 +168,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         std::copy(from, to, tmpData + position);
         deallocate(currentData, currentCapacity);
         return tmpData + position;
-    } else if (const auto after = currentSize - position; after > count) {
+    } else if (const Range after = currentSize - position; after > count) {
         std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
         std::move_backward(currentBegin + position, currentEnd - count, currentEnd);
     } else
@@ -202,22 +202,22 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         return end();
     else if (pos == Iterator())  {
         reserve(count);
-        position = 0;
+        position = static_cast<Range>(0);
     } else
         position = static_cast<Range>(std::distance(beginUnsafe(), pos));
     const auto currentData = dataUnsafe();
-    const auto currentSize = sizeUnsafe();
+    const Range currentSize = sizeUnsafe();
     auto currentBegin = beginUnsafe();
     auto currentEnd = endUnsafe();
-    if (const auto currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
-        const auto desiredCapacity = currentCapacity + std::max(currentCapacity, count);
+    if (const Range currentCapacity = capacityUnsafe(), total = currentSize + count; total > currentCapacity)  {
+        const Range desiredCapacity = currentCapacity + std::max(currentCapacity, count);
         const auto tmpData = allocate(desiredCapacity);
         setData(tmpData);
         setSize(total);
         setCapacity(desiredCapacity);
         if constexpr (IsSmallOptimized) {
             if (tmpData == currentData) {
-                if (const auto after = currentSize - position; after > count) {
+                if (const Range after = currentSize - position; after > count) {
                     std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
                     std::move_backward(currentBegin + position, currentEnd - count, currentEnd);
                 } else
@@ -231,7 +231,7 @@ inline typename Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimize
         MapCopy(from, to, std::forward<Map>(map), tmpData + position);
         deallocate(currentData, currentCapacity);
         return tmpData + position;
-    } else if (const auto after = currentSize - position; after > count) {
+    } else if (const Range after = currentSize - position; after > count) {
         std::uninitialized_move(currentEnd - count, currentEnd, currentEnd);
         std::move_backward(currentBegin + position, currentEnd - count, currentEnd);
     } else
@@ -293,7 +293,7 @@ inline std::enable_if_t<std::is_constructible_v<Type, decltype(*std::declval<Inp
         Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::resize(InputIterator from, InputIterator to)
     noexcept(nothrow_forward_iterator_constructible(InputIterator) && nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
-    const auto count = static_cast<Range>(std::distance(from, to));
+    const Range count = static_cast<Range>(std::distance(from, to));
 
     if (!count)  {
         clear();
@@ -360,10 +360,10 @@ template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::releaseUnsafe(void) noexcept_destructible(Type)
 {
     const auto currentData = dataUnsafe();
-    const auto currentCapacity = capacityUnsafe();
+    const Range currentCapacity = capacityUnsafe();
 
     clearUnsafe();
-    setCapacity(0);
+    setCapacity(static_cast<Range>(0));
     setData(nullptr);
     deallocate(currentData, currentCapacity);
 }
@@ -385,10 +385,10 @@ inline bool Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
     noexcept(nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
     if constexpr (IsSafe) {
-        const auto currentCapacity = capacityUnsafe();
+        const Range currentCapacity = capacityUnsafe();
         if (currentCapacity >= capacity)
             return false;
-        const auto currentSize = sizeUnsafe();
+        const Range currentSize = sizeUnsafe();
         const auto currentData = dataUnsafe();
         const auto tmpData = allocate(capacity);
         setData(tmpData);
@@ -417,9 +417,9 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
     noexcept(nothrow_forward_constructible(Type) && nothrow_destructible(Type))
 {
     const auto currentData = dataUnsafe();
-    const auto currentSize = sizeUnsafe();
+    const Range currentSize = sizeUnsafe();
     const Range currentCapacity = capacityUnsafe();
-    const Range desiredCapacity = currentCapacity + std::max(currentCapacity, minimum);
+    const Range desiredCapacity = currentCapacity + static_cast<Range>(std::max(currentCapacity, minimum));
     const auto tmpData = allocate(desiredCapacity);
 
     setData(tmpData);
@@ -454,8 +454,8 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
 template<typename Base, typename Type, typename Range, bool IsSmallOptimized>
 inline bool Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::operator==(const VectorDetails &other) const noexcept
 {
-    const auto count = size();
-    const auto otherCount = other.size();
+    const Range count = size();
+    const Range otherCount = other.size();
 
     if (count == otherCount)  {
         if (count)
