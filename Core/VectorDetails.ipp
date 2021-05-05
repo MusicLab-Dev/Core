@@ -14,7 +14,7 @@ inline std::enable_if_t<std::is_constructible_v<Type, Args...>, Type &> Core::In
         grow();
     const Range currentSize = sizeUnsafe();
     Type * const elem = dataUnsafe() + currentSize;
-    setSize(currentSize + static_cast<Range>(1));
+    setSize(static_cast<Range>(currentSize + static_cast<Range>(1)));
     new (elem) Type(std::forward<Args>(args)...);
     return *elem;
 }
@@ -419,7 +419,7 @@ inline void Core::Internal::VectorDetails<Base, Type, Range, IsSmallOptimized>::
     const auto currentData = dataUnsafe();
     const Range currentSize = sizeUnsafe();
     const Range currentCapacity = capacityUnsafe();
-    const Range desiredCapacity = currentCapacity + static_cast<Range>(std::max(currentCapacity, minimum));
+    const Range desiredCapacity = static_cast<Range>(currentCapacity + static_cast<Range>(std::max(currentCapacity, minimum)));
     const auto tmpData = allocate(desiredCapacity);
 
     setData(tmpData);
