@@ -63,7 +63,7 @@ set(CoreSources
 
 add_library(${PROJECT_NAME} ${CoreSources})
 
-target_precompile_headers(${PROJECT_NAME} PUBLIC ${CorePrecompiledHeaders})
+# target_precompile_headers(${PROJECT_NAME} PUBLIC ${CorePrecompiledHeaders})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CoreDir}/..)
 
