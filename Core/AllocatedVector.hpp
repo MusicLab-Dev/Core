@@ -26,5 +26,5 @@ namespace Core
     /** @brief 16 bytes vector with a reduced range
      * The vector must take an allocator and a deallocator functor */
     template<typename Type, auto AllocateFunc, auto DeallocateFunc>
-    using AllocatedTinyVector = Vector<Type, std::uint32_t>;
+    using AllocatedTinyVector = AllocatedVector<Type, std::uint32_t>;
 }

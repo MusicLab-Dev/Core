@@ -3,35 +3,24 @@ project(Core)
 
 get_filename_component(CoreDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
-set(CoreSources
+set(CorePrecompiledHeaders
     ${CoreDir}/AllocatedFlatString.hpp
     ${CoreDir}/AllocatedFlatVector.hpp
-    ${CoreDir}/AllocatedFlatVectorBase.hpp
     ${CoreDir}/AllocatedSmallString.hpp
     ${CoreDir}/AllocatedSmallVector.hpp
-    ${CoreDir}/AllocatedSmallVectorBase.hpp
     ${CoreDir}/AllocatedString.hpp
     ${CoreDir}/AllocatedVector.hpp
-    ${CoreDir}/AllocatedVectorBase.hpp
     ${CoreDir}/Assert.hpp
-    ${CoreDir}/Core.cmake
-    ${CoreDir}/Core.cpp
     ${CoreDir}/Dispatcher.hpp
     ${CoreDir}/DispatcherDetails.hpp
     ${CoreDir}/FlatString.hpp
     ${CoreDir}/FlatVector.hpp
-    ${CoreDir}/FlatVectorBase.hpp
-    ${CoreDir}/FlatVectorBase.ipp
     ${CoreDir}/Functor.hpp
     ${CoreDir}/Hash.hpp
     ${CoreDir}/HeapArray.hpp
-    ${CoreDir}/HeapArray.ipp
     ${CoreDir}/MPMCQueue.hpp
-    ${CoreDir}/MPMCQueue.ipp
     ${CoreDir}/SmallString.hpp
     ${CoreDir}/SmallVector.hpp
-    ${CoreDir}/SmallVectorBase.hpp
-    ${CoreDir}/SmallVectorBase.ipp
     ${CoreDir}/SortedAllocatedFlatVector.hpp
     ${CoreDir}/SortedAllocatedSmallVector.hpp
     ${CoreDir}/SortedAllocatedVector.hpp
@@ -39,9 +28,7 @@ set(CoreSources
     ${CoreDir}/SortedSmallVector.hpp
     ${CoreDir}/SortedVector.hpp
     ${CoreDir}/SortedVectorDetails.hpp
-    ${CoreDir}/SortedVectorDetails.ipp
     ${CoreDir}/SPSCQueue.hpp
-    ${CoreDir}/SPSCQueue.ipp
     ${CoreDir}/String.hpp
     ${CoreDir}/StringDetails.hpp
     ${CoreDir}/StringLiteral.hpp
@@ -50,15 +37,33 @@ set(CoreSources
     ${CoreDir}/UniqueAlloc.hpp
     ${CoreDir}/MacroUtils.hpp
     ${CoreDir}/Utils.hpp
-    ${CoreDir}/Utils.ipp
     ${CoreDir}/Vector.hpp
-    ${CoreDir}/VectorBase.hpp
-    ${CoreDir}/VectorBase.ipp
     ${CoreDir}/VectorDetails.hpp
+)
+
+set(CoreSources
+    ${CorePrecompiledHeaders}
+    ${CoreDir}/AllocatedFlatVectorBase.hpp
+    ${CoreDir}/AllocatedSmallVectorBase.hpp
+    ${CoreDir}/AllocatedVectorBase.hpp
+    ${CoreDir}/FlatVectorBase.hpp
+    ${CoreDir}/SmallVectorBase.hpp
+    ${CoreDir}/VectorBase.hpp
+    ${CoreDir}/Core.cpp
+    ${CoreDir}/FlatVectorBase.ipp
+    ${CoreDir}/HeapArray.ipp
+    ${CoreDir}/MPMCQueue.ipp
+    ${CoreDir}/SmallVectorBase.ipp
+    ${CoreDir}/SortedVectorDetails.ipp
+    ${CoreDir}/SPSCQueue.ipp
+    ${CoreDir}/Utils.ipp
+    ${CoreDir}/VectorBase.ipp
     ${CoreDir}/VectorDetails.ipp
 )
 
 add_library(${PROJECT_NAME} ${CoreSources})
+
+target_precompile_headers(${PROJECT_NAME} PUBLIC ${CorePrecompiledHeaders})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CoreDir}/..)
 
