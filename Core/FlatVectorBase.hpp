@@ -123,12 +123,16 @@ protected:
     void setCapacity(const Range capacity) noexcept { _ptr->capacity = capacity; }
 
 
-    /** @brief Allocates a new buffer */
+    /** @brief Allocates a new buffer and transfer custom header type if any */
     [[nodiscard]] Type *allocate(const Range capacity) noexcept
     {
         auto ptr = Utils::AlignedAlloc<alignof(Header), Header>(sizeof(Header) + sizeof(Type) * capacity);
-        if constexpr (!std::is_same_v<CustomHeaderType, NoCustomHeaderType>)
-            new (&ptr->customType) CustomHeaderType {};
+        if constexpr (!std::is_same_v<CustomHeaderType, NoCustomHeaderType>) {
+            if (_ptr)
+                new (&ptr->customType) CustomHeaderType(std::move(_ptr->customType));
+            else
+                new (&ptr->customType) CustomHeaderType {};
+        }
         return reinterpret_cast<Type *>(ptr + 1);
     }
 

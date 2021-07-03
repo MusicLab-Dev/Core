@@ -11,7 +11,7 @@ inline std::enable_if_t<std::is_constructible_v<Type, Args...>, Type &> Core::In
         return DetailsBase::push(std::forward<Args>(args)...);
     Type value(std::forward<Args>(args)...);
     auto it = findSortedPlacement(value);
-    return *DetailsBase::insert(it, { std::move(value) });
+    return *DetailsBase::insert(it, std::move(value)); // @todo use a real emplace constructor to push
 }
 
 template<typename Base, typename Type, typename Range, typename Compare, bool IsSmallOptimized>
