@@ -41,7 +41,7 @@ public:
     struct Cache
     {
         Buffer buffer {};
-        std::size_t value { 0 };
+        std::size_t value { 0u };
     };
 
     /** @brief Default constructor, the queue is unsafe to use until 'resize' is called */

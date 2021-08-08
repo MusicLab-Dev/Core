@@ -166,14 +166,21 @@ inline std::size_t Core::SPSCQueue<Type>::size(void) const noexcept
 template<typename Type>
 inline void Core::SPSCQueue<Type>::resize(const std::size_t capacity, const bool usedAsBuffer) noexcept
 {
-    Utils::AlignedFree(_tailCache.buffer.data);
+    const auto totalCapacity = capacity + usedAsBuffer;
+    auto data = _tailCache.buffer.data;
 
-    _tailCache = Cache{};
-    _tailCache.buffer.capacity = capacity + usedAsBuffer;
-    _tailCache.buffer.data = reinterpret_cast<Type *>(Utils::AlignedAlloc<alignof(Type)>(sizeof(Type) * _tailCache.buffer.capacity));
+    if (_tailCache.buffer.capacity != totalCapacity)
+        data = Utils::AlignedAlloc<alignof(Type), Type>(sizeof(Type) * totalCapacity);
+
+    if (_tailCache.buffer.data && _tailCache.buffer.data != data)
+        Utils::AlignedFree(_tailCache.buffer.data);
+
+    _tailCache.buffer.capacity = totalCapacity;
+    _tailCache.buffer.data = data;
+    _tailCache.value = 0u;
     _tail.store(0u);
 
-    _headCache = Cache{};
     _headCache.buffer = _tailCache.buffer;
+    _headCache.value = 0u;
     _head.store(0u);
 }
