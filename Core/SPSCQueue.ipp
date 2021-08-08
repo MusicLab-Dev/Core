@@ -172,8 +172,10 @@ inline void Core::SPSCQueue<Type>::resize(const std::size_t capacity, const bool
     if (_tailCache.buffer.capacity != totalCapacity)
         data = Utils::AlignedAlloc<alignof(Type), Type>(sizeof(Type) * totalCapacity);
 
-    if (_tailCache.buffer.data && _tailCache.buffer.data != data)
+    if (_tailCache.buffer.data && _tailCache.buffer.data != data) {
+        clear();
         Utils::AlignedFree(_tailCache.buffer.data);
+    }
 
     _tailCache.buffer.capacity = totalCapacity;
     _tailCache.buffer.data = data;

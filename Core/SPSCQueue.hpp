@@ -34,7 +34,7 @@ public:
     struct Buffer
     {
         Type *data { nullptr };
-        std::size_t capacity { 0 };
+        std::size_t capacity { 0u };
     };
 
     /** @brief Local thread cache */
