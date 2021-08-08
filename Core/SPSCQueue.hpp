@@ -99,11 +99,14 @@ public:
     /** @brief Get the size of the queue */
     [[nodiscard]] std::size_t size(void) const noexcept;
 
+    /** @brief Resize the SPSCQueue */
+    void resize(const std::size_t capacity, const bool usedAsBuffer = true) noexcept;
+
 private:
-    alignas_cacheline std::atomic<size_t> _tail { 0 }; // Tail accessed by both producer and consumer
+    alignas_cacheline std::atomic<size_t> _tail { 0u }; // Tail accessed by both producer and consumer
     alignas_cacheline Cache _tailCache {}; // Cache accessed by consumer thread
 
-    alignas_cacheline std::atomic<size_t> _head { 0 }; // Head accessed by both producer and consumer
+    alignas_cacheline std::atomic<size_t> _head { 0u }; // Head accessed by both producer and consumer
     alignas_cacheline Cache _headCache {}; // Cache accessed by producer thread
 
     /** @brief Copy and move constructors disabled */
