@@ -44,6 +44,9 @@ public:
         std::size_t value { 0 };
     };
 
+    /** @brief Default constructor, the queue is unsafe to use until 'resize' is called */
+    SPSCQueue(void) noexcept = default;
+
     /** @brief Default constructor initialize the queue
      * If 'usedAsBuffer' is true, capacity will be increased by 1 because the queue implementation needs one unused value when the queue is full */
     SPSCQueue(const std::size_t capacity, const bool usedAsBuffer = true) noexcept;
