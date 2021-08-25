@@ -5,8 +5,7 @@
 
 #include <gtest/gtest.h>
 
-#include <memory_resource>
-
+#include <Core/PMR.hpp>
 #include <Core/String.hpp>
 #include <Core/AllocatedString.hpp>
 #include <Core/FlatString.hpp>

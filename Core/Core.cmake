@@ -19,6 +19,7 @@ set(CorePrecompiledHeaders
     ${CoreDir}/Hash.hpp
     ${CoreDir}/HeapArray.hpp
     ${CoreDir}/MPMCQueue.hpp
+    ${CoreDir}/PMR.hpp
     ${CoreDir}/SmallString.hpp
     ${CoreDir}/SmallVector.hpp
     ${CoreDir}/SortedAllocatedFlatVector.hpp
