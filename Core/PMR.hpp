@@ -5,7 +5,7 @@
 
 #pragma once
 
-#if __APPLE__
+#ifdef __APPLE__
 # include <experimental/memory_resource>
 # include <Core/Utils.hpp>
 

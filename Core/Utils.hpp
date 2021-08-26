@@ -11,6 +11,7 @@
 #include <iterator>
 #include <utility>
 #include <cstdlib>
+#include <algorithm>
 
 /** @brief Helper for unused variables */
 #define UNUSED(x) static_cast<void>(x)
