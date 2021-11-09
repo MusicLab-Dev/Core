@@ -8,7 +8,7 @@
 
 TEST(UniqueAlloc, Basics)
 {
-    Core::UniqueAlloc<int> alloc(42);
+    auto alloc = Core::UniqueAlloc<int>::Make(42);
 
     ASSERT_EQ(*alloc, 42);
     ++*alloc;
